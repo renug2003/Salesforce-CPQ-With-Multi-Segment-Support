@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Product_Line__c</fullName>
+    <label>Product Line</label>
+    <type>Picklist</type>
+    <required>true</required><valueSet><restricted>true</restricted><valueSetDefinition><sorted>false</sorted><value><fullName>DPPO</fullName><default>false</default><label>DPPO</label></value><value><fullName>DHMO</fullName><default>false</default><label>DHMO</label></value></valueSetDefinition></valueSet>
+    <description>DPPO or DHMO</description>
+</CustomField>

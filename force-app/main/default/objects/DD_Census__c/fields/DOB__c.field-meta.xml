@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DOB__c</fullName>
+    <label>Date of Birth</label>
+    <type>Date</type>
+    <required>true</required>
+    <description>For age-based rating</description>
+</CustomField>

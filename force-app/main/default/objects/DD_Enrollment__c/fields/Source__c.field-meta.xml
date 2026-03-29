@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Source__c</fullName>
+    <label>Enrollment Source</label>
+    <type>Picklist</type>
+    <required>true</required><valueSet><restricted>true</restricted><valueSetDefinition><sorted>false</sorted><value><fullName>New Hire</fullName><default>false</default><label>New Hire</label></value><value><fullName>Open Enrollment</fullName><default>false</default><label>Open Enrollment</label></value><value><fullName>QLE</fullName><default>false</default><label>QLE</label></value><value><fullName>COBRA</fullName><default>false</default><label>COBRA</label></value><value><fullName>Bulk Upload</fullName><default>false</default><label>Bulk Upload</label></value></valueSetDefinition></valueSet>
+    <description>How member was enrolled</description>
+</CustomField>

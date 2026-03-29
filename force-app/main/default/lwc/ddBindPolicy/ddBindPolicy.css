@@ -1,0 +1,105 @@
+:host {
+    --dd-green:      #43B02A;
+    --dd-green-dark: #2E7D32;
+    --dd-green-pale: #DFF5E3;
+    --dd-green-mint: #F3FBF4;
+    --dd-dark:       #333333;
+    --dd-gray:       #6D6E71;
+    --dd-border:     #E8E8E8;
+}
+
+.bind-summary { margin-bottom: 1.5rem; }
+
+.bind-summary-header {
+    font-size: 0.875rem;
+    color: var(--dd-gray);
+    margin-bottom: 1rem;
+}
+
+.bind-section-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--dd-green-dark);
+    background: var(--dd-green-pale);
+    border-left: 4px solid var(--dd-green);
+    padding: 0.3rem 0.6rem;
+    margin: 1rem 0 0.5rem;
+    border-radius: 0 4px 4px 0;
+}
+
+.bind-row {
+    display: flex;
+    padding: 0.35rem 0.5rem;
+    border-bottom: 1px solid var(--dd-border);
+    font-size: 0.875rem;
+}
+.bind-lbl { width: 180px; color: var(--dd-gray); flex-shrink: 0; }
+.bind-val  { color: var(--dd-dark); font-weight: 600; }
+.bind-premium { color: var(--dd-green-dark); font-size: 1rem; font-weight: 700; }
+
+.bind-plan-row {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--dd-border);
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    background: var(--dd-green-mint);
+}
+.bind-plan-name { font-weight: 700; color: var(--dd-dark); display: block; font-size: 0.875rem; }
+.bind-plan-detail { font-size: 0.78rem; color: var(--dd-gray); }
+
+.bind-prop-row { padding: 0.25rem 0.5rem; }
+
+.bind-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--dd-border);
+}
+
+.bind-success {
+    text-align: center;
+    padding: 2rem 1rem;
+}
+.bind-success h2 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--dd-green-dark);
+    margin: 1rem 0 0.5rem;
+}
+.bind-success p { color: var(--dd-gray); margin-bottom: 1.5rem; }
+.success-icon { --lwc-colorTextIconSuccess: var(--dd-green); }
+
+.bind-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-width: 360px;
+    margin: 0 auto;
+}
+.bind-link {
+    display: flex;
+    align-items: center;
+    padding: 0.6rem 1rem;
+    background: var(--dd-green-pale);
+    border: 1px solid var(--dd-green);
+    border-radius: 6px;
+    color: var(--dd-green-dark);
+    font-weight: 600;
+    text-decoration: none;
+}
+.bind-link:hover { background: var(--dd-green); color: white; }
+
+.bind-error {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: #FDE8E7;
+    border-left: 4px solid #E03C31;
+    border-radius: 0 4px 4px 0;
+    color: #333;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}

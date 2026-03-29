@@ -1,0 +1,35 @@
+<template>
+
+    <!-- Spinner while the Opportunity is being created -->
+    <template lwc:if={isCreating}>
+        <div class="spinner-wrap">
+            <lightning-spinner alternative-text="Creating quote..." size="medium" variant="brand"></lightning-spinner>
+            <p class="spinner-msg">Preparing your quote&hellip;</p>
+        </div>
+    </template>
+
+    <!-- Error state -->
+    <template lwc:if={hasError}>
+        <div class="error-wrap">
+            <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                <lightning-icon icon-name="utility:error" alternative-text="error"
+                    size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                <h2>{errorMessage}</h2>
+            </div>
+            <div class="slds-align_absolute-center slds-m-top_medium">
+                <lightning-button label="Close" onclick={handleClose}></lightning-button>
+            </div>
+        </div>
+    </template>
+
+    <!-- Full-screen overlay containing the 5-step quote wizard -->
+    <template lwc:if={showWizard}>
+        <div class="wizard-fullscreen">
+            <c-dd-account-quote-creator
+                record-id={oppId}
+                onclose={handleWizardClose}>
+            </c-dd-account-quote-creator>
+        </div>
+    </template>
+
+</template>

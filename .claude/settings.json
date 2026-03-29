@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(__NEW_LINE_88508c0cfdb3b45c__ for:*)",
+      "Read(//Users/renukagunasekaran/Library/Mobile Documents/com~apple~CloudDocs/AI/salesforce project/claudecode/dd-salesforce-digitalinsurancecpq/$BASE/$obj/**)",
+      "Bash(for field:*)",
+      "Bash(__NEW_LINE_1ba5898a6f3abad0__ for:*)",
+      "Bash(sf config:*)",
+      "Bash(sf sobject:*)",
+      "Bash(python3 -c \"import sys,json; data=json.load\\(sys.stdin\\); [print\\(f[''''name'''']\\) for f in data[''''fields''''] if ''''__c'''' in f[''''name'''']]\")",
+      "Bash(sf data:*)"
+    ]
+  }
+}

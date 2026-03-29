@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SIC_Code__c</fullName>
+    <label>SIC Code</label>
+    <type>Text</type>
+    <length>4</length>
+    <required>false</required>
+    <unique>false</unique>
+    <externalId>false</externalId>
+    <description>4-digit Standard Industrial Classification code for the employer group. Used by the rating engine to determine rate level (Level 1 / Level 2) and eligibility.</description>
+    <inlineHelpText>Enter the 4-digit SIC code for this employer's primary business activity (e.g., 7372 for Prepackaged Software).</inlineHelpText>
+</CustomField>

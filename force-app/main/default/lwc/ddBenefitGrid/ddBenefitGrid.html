@@ -1,0 +1,153 @@
+<template>
+    <lightning-card class="dd-benefit-grid-card">
+        <div slot="title" class="dd-card-title">
+            <lightning-icon icon-name="standard:product" size="small" class="dd-title-icon"></lightning-icon>
+            <span class="dd-title-text">Dental Benefit Schedule</span>
+        </div>
+
+        <!-- Loading -->
+        <template lwc:if={isLoading}>
+            <div class="dd-loading-container">
+                <lightning-spinner alternative-text="Loading benefits..." size="medium"></lightning-spinner>
+                <p class="dd-loading-text">Loading benefit schedule...</p>
+            </div>
+        </template>
+
+        <!-- Error -->
+        <template lwc:if={hasError}>
+            <div class="dd-error-panel">
+                <lightning-icon icon-name="utility:error" size="medium" variant="error"></lightning-icon>
+                <p class="dd-error-message">{errorMessage}</p>
+            </div>
+        </template>
+
+        <!-- Content -->
+        <template lwc:if={hasData}>
+            <div class="dd-benefit-grid-body">
+
+                <!-- Product header bar -->
+                <div class="dd-product-header">
+                    <div class="dd-product-name">{productName}</div>
+                    <div class="dd-product-meta">
+                        <span class="dd-badge dd-badge--line">{productLine}</span>
+                        <span class="dd-badge dd-badge--category">{categoryName}</span>
+                        <template lwc:if={isDhmo}>
+                            <span class="dd-badge dd-badge--dhmo">DHMO — Copay Schedule</span>
+                        </template>
+                        <template lwc:if={isDppo}>
+                            <span class="dd-badge dd-badge--ppo">PPO — Coinsurance Schedule</span>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <lightning-tabset variant="scoped" class="dd-coverage-tabs" onactive={handleTabSelect}>
+                    <template for:each={tabs} for:item="tab">
+                        <lightning-tab key={tab.id} value={tab.id} label={tab.label}>
+
+                            <!-- Coverage spec meta bar -->
+                            <div class="dd-spec-meta-bar">
+                                <template lwc:if={isDppo}>
+                                    <span class="dd-spec-meta-item">
+                                        <span class="dd-spec-meta-label">PPO Coinsurance:</span>
+                                        <strong>{tab.coinsurancePPO}</strong>
+                                    </span>
+                                    <span class="dd-spec-meta-item">
+                                        <span class="dd-spec-meta-label">Non-PPO Coinsurance:</span>
+                                        <strong>{tab.coinsuranceNonPPO}</strong>
+                                    </span>
+                                </template>
+                                <span class="dd-spec-meta-item">
+                                    <span class="dd-spec-meta-label">Deductible Applies:</span>
+                                    <strong>{tab.deductibleAppliesLabel}</strong>
+                                </span>
+                                <span class="dd-spec-meta-item dd-spec-meta-item--count">
+                                    {tab.filteredCount} of {tab.totalCount} benefits
+                                </span>
+                            </div>
+
+                            <!-- Search -->
+                            <div class="dd-search-bar">
+                                <lightning-icon icon-name="utility:search" size="x-small" class="dd-search-icon"></lightning-icon>
+                                <input
+                                    type="text"
+                                    class="dd-search-input"
+                                    placeholder="Filter by CDT code or description..."
+                                    value={tab.searchTerm}
+                                    data-tab-id={tab.id}
+                                    oninput={handleSearch}
+                                />
+                                <template lwc:if={tab.hasSearch}>
+                                    <button class="dd-search-clear" data-tab-id={tab.id} onclick={handleClearSearch}>
+                                        <lightning-icon icon-name="utility:close" size="x-small"></lightning-icon>
+                                    </button>
+                                </template>
+                            </div>
+
+                            <!-- Table -->
+                            <div class="dd-table-container">
+                                <table class="dd-benefit-table">
+                                    <thead>
+                                        <tr>
+                                            <th class={tab.thCdtCode} data-tab-id={tab.id} data-field="cdtCode" onclick={handleSort}>
+                                                CDT Code
+                                                <span class="dd-sort-arrow">{tab.arrowCdtCode}</span>
+                                            </th>
+                                            <th class={tab.thDescription} data-tab-id={tab.id} data-field="description" onclick={handleSort}>
+                                                Description
+                                                <span class="dd-sort-arrow">{tab.arrowDescription}</span>
+                                            </th>
+                                            <th class={tab.thFrequency} data-tab-id={tab.id} data-field="frequencyDisplay" onclick={handleSort}>
+                                                Frequency
+                                                <span class="dd-sort-arrow">{tab.arrowFrequency}</span>
+                                            </th>
+                                            <th class="dd-th dd-th--center">Age Range</th>
+                                            <th class="dd-th dd-th--center">Per Tooth</th>
+                                            <th class="dd-th dd-th--center">Pre-Auth</th>
+                                            <template lwc:if={isDhmo}>
+                                                <th class="dd-th dd-th--center">11A Copay</th>
+                                                <th class="dd-th dd-th--center">15B Copay</th>
+                                                <th class="dd-th dd-th--center">17B Copay</th>
+                                            </template>
+                                            <th class="dd-th">Notes</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template lwc:if={tab.hasRows}>
+                                            <template for:each={tab.displayRows} for:item="row">
+                                                <tr key={row.id} class={row.rowClass}>
+                                                    <td class="dd-td dd-td--code">{row.cdtCode}</td>
+                                                    <td class="dd-td dd-td--description">{row.description}</td>
+                                                    <td class="dd-td dd-td--center">{row.frequencyDisplay}</td>
+                                                    <td class="dd-td dd-td--center">{row.ageRangeDisplay}</td>
+                                                    <td class="dd-td dd-td--center">{row.toothSpecificLabel}</td>
+                                                    <td class="dd-td dd-td--center">{row.requiresPreauthLabel}</td>
+                                                    <template lwc:if={isDhmo}>
+                                                        <td class="dd-td dd-td--center dd-td--copay">{row.copay11ALabel}</td>
+                                                        <td class="dd-td dd-td--center dd-td--copay">{row.copay15BLabel}</td>
+                                                        <td class="dd-td dd-td--center dd-td--copay">{row.copay17BLabel}</td>
+                                                    </template>
+                                                    <td class="dd-td dd-td--notes">{row.notesDisplay}</td>
+                                                </tr>
+                                            </template>
+                                        </template>
+                                        <template lwc:else>
+                                            <tr>
+                                                <td colspan="10" class="dd-td dd-no-results">
+                                                    No benefits match your filter.
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </lightning-tab>
+                    </template>
+                </lightning-tabset>
+
+            </div>
+        </template>
+
+    </lightning-card>
+</template>

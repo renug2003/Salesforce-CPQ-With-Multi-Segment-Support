@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>DD_Attribute_Definition__c</members>
+        <members>DD_Benefit_Spec__c</members>
+        <members>DD_Billing__c</members>
+        <members>DD_Census__c</members>
+        <members>DD_Claim_Line__c</members>
+        <members>DD_Claim__c</members>
+        <members>DD_Commission__c</members>
+        <members>DD_Coverage_Spec__c</members>
+        <members>DD_Dependent__c</members>
+        <members>DD_Enrollment__c</members>
+        <members>DD_Policy_Coverage__c</members>
+        <members>DD_Policy__c</members>
+        <members>DD_Product_Attribute__c</members>
+        <members>DD_Product_Bundle__c</members>
+        <members>DD_Product_Catalog__c</members>
+        <members>DD_Product_Category__c</members>
+        <members>DD_Product_Rule__c</members>
+        <members>DD_Product__c</members>
+        <members>DD_Quote_Benefit_Override__c</members>
+        <members>DD_Quote_Coverage_Config__c</members>
+        <members>DD_Quote_Plan_Config__c</members>
+        <members>DD_Quote_Rate_Result__c</members>
+        <members>DD_Rate_Entry__c</members>
+        <members>DD_Rate_Table__c</members>
+        <members>DD_SIC_Mapping__c</members>
+        <members>DD_Selling_Model__c</members>
+        <members>Account</members>
+        <members>Quote</members>
+        <name>CustomObject</name>
+    </types>
+    <version>62.0</version>
+</Package>

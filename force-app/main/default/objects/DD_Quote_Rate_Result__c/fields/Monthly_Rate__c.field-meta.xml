@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Monthly_Rate__c</fullName>
+    <label>Monthly Rate</label>
+    <type>Currency</type>
+    <precision>18</precision><scale>2</scale><required>true</required>
+    <description>Per member per month rate</description>
+</CustomField>

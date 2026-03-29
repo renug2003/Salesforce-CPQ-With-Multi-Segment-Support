@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>Represents a proposal document generated from a Quote Plan Configuration. One proposal is created per selected plan. Each proposal has an associated PDF stored in Salesforce Files.</description>
+    <label>DD Proposal</label>
+    <nameField>
+        <displayFormat>PROP-{0000}</displayFormat>
+        <label>Proposal Number</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>DD Proposals</pluralLabel>
+    <sharingModel>ReadWrite</sharingModel>
+</CustomObject>

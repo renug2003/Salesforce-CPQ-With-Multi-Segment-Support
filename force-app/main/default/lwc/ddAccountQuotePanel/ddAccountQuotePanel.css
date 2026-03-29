@@ -1,0 +1,105 @@
+:host {
+    --dd-navy:       #003B71;
+    --dd-green:      #78BE20;
+    --dd-green-dark: #4C8C2B;
+    --dd-red:        #E03C31;
+    --dd-gray:       #6D6E71;
+    --dd-border:     #E8E8E8;
+    --dd-off-white:  #F7F7F7;
+    --dd-dark:       #333333;
+    display: block;
+}
+
+.panel-root {
+    font-family: 'Salesforce Sans', Arial, sans-serif;
+}
+
+/* ── Error ───────────────────────────────────────────────────────────────── */
+.panel-error {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #FDE8E7;
+    border-left: 4px solid var(--dd-red);
+    padding: 0.75rem 1rem;
+    border-radius: 0 4px 4px 0;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--dd-dark);
+}
+.err-close {
+    margin-left: auto;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--dd-gray);
+    font-size: 1rem;
+    line-height: 1;
+}
+
+/* ── Creating spinner ────────────────────────────────────────────────────── */
+.panel-creating {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+    gap: 1rem;
+}
+.creating-msg {
+    font-size: 0.875rem;
+    color: var(--dd-gray);
+    margin: 0;
+}
+
+/* ── Hero launch area ────────────────────────────────────────────────────── */
+.panel-hero {
+    background: linear-gradient(135deg, #003B71 0%, #00609A 50%, #0085CA 100%);
+    border-radius: 10px;
+    padding: 1.5rem 2rem;
+    margin: 0;
+}
+.hero-content {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+.hero-icon-wrap {
+    flex-shrink: 0;
+    background: rgba(255,255,255,0.15);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.hero-icon { --lwc-colorTextIconDefault: #fff; }
+.hero-text { flex: 1; min-width: 200px; }
+.hero-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.25rem;
+}
+.hero-desc {
+    font-size: 0.825rem;
+    color: rgba(255,255,255,0.85);
+    margin: 0;
+    line-height: 1.45;
+}
+.hero-btn {
+    flex-shrink: 0;
+    --slds-c-button-brand-color-background: var(--dd-green);
+    --slds-c-button-brand-color-background-hover: var(--dd-green-dark);
+    --slds-c-button-brand-color-border: var(--dd-green);
+    --slds-c-button-brand-color-border-hover: var(--dd-green-dark);
+}
+
+/* ── Inline wizard container ─────────────────────────────────────────────── */
+.panel-wizard {
+    border: 1px solid var(--dd-border);
+    border-radius: 10px;
+    overflow: hidden;
+}

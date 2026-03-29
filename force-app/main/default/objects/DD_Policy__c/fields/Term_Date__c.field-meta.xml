@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Term_Date__c</fullName>
+    <label>Termination Date</label>
+    <type>Date</type>
+    <required>false</required>
+    <description>Coverage end date</description>
+</CustomField>

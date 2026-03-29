@@ -1,0 +1,41 @@
+<template>
+    <template lwc:if={isOpen}>
+        <!-- SLDS full modal backdrop -->
+        <div class="slds-backdrop slds-backdrop_open"></div>
+
+        <!-- SLDS full-screen modal -->
+        <section
+            role="dialog"
+            tabindex="-1"
+            aria-modal="true"
+            aria-label="New Quote"
+            class="slds-modal slds-fade-in-open slds-modal_full">
+            <div class="slds-modal__container">
+
+                <!-- Modal header -->
+                <header class="slds-modal__header aqo-modal-header">
+                    <button
+                        class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse aqo-close-btn"
+                        title="Close"
+                        onclick={handleClose}>
+                        <lightning-icon icon-name="utility:close" size="small" alternative-text="Close"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 class="slds-modal__title slds-has-flexi-truncate">
+                        <lightning-icon icon-name="standard:opportunity" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                        New Quote
+                    </h2>
+                </header>
+
+                <!-- Modal body — quote wizard fills this -->
+                <div class="slds-modal__content aqo-modal-body">
+                    <c-dd-account-quote-creator
+                        record-id={oppId}
+                        onclose={handleClose}>
+                    </c-dd-account-quote-creator>
+                </div>
+
+            </div>
+        </section>
+    </template>
+</template>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Product_Category__c</fullName>
+    <label>Product Category</label>
+    <type>Lookup</type>
+    <referenceTo>DD_Product_Category__c</referenceTo><relationshipLabel>Products</relationshipLabel><relationshipName>Products</relationshipName><required>true</required>
+    <description>Parent category</description>
+    <deleteConstraint>Restrict</deleteConstraint>
+</CustomField>

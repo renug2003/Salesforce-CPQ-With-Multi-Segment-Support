@@ -1,0 +1,131 @@
+CDT_Code__c,CDT_Description__c,Benefit_Category__c,Frequency_Limit__c,Frequency_Period__c,Age_Min__c,Age_Max__c,Tooth_Specific__c,Quadrant_Specific__c,Requires_Preauth__c,Notes__c,DHMO_Copay_11A__c,DHMO_Copay_15B__c,DHMO_Copay_17B__c
+D0120,Periodic oral evaluation - established patient,Diagnostic and Preventive,1,Per 6 Months,0,999,false,false,false,Per provider,,,
+D0140,Limited oral evaluation - problem focused,Diagnostic and Preventive,1,Per Lifetime,0,999,false,false,false,Per patient per provider,,,
+D0145,Oral evaluation patient under 3 and counseling with caregiver,Diagnostic and Preventive,1,Per Lifetime,0,3,false,false,false,,,,
+D0150,Comprehensive oral evaluation - new or established patient,Diagnostic and Preventive,1,Per Lifetime,0,999,false,false,false,Per patient per provider,,,
+D0160,Detailed and extensive oral evaluation - problem focused,Diagnostic and Preventive,1,Per Lifetime,0,999,false,false,false,Per patient per provider; by report,,,
+D0170,Re-evaluation - limited problem focused,Diagnostic and Preventive,6,Per 3 Months,0,999,false,false,false,Max 12 in 12 months; not post-op,,,
+D0171,Re-evaluation - post-operative office visit,Diagnostic and Preventive,,,0,999,false,false,false,,,,
+D0180,Comprehensive periodontal evaluation,Diagnostic and Preventive,1,Per Lifetime,0,999,false,false,false,New or established patient,,,
+D0210,Intraoral - complete series of radiographic images,Diagnostic and Preventive,1,Per 36 Months,0,999,false,false,false,Per provider,,,
+D0220,Intraoral - periapical first radiographic image,Diagnostic and Preventive,20,Per 12 Months,0,999,false,false,false,Combined D0220+D0230 max 20 per 12 mo per provider,,,
+D0230,Intraoral - periapical each additional radiographic image,Diagnostic and Preventive,20,Per 12 Months,0,999,false,false,false,Combined D0220+D0230 max 20 per 12 mo per provider,,,
+D0240,Intraoral - occlusal radiographic image,Diagnostic and Preventive,2,Per 6 Months,0,999,false,false,false,Per provider,,,
+D0250,Extra-oral 2D projection radiographic image,Diagnostic and Preventive,1,Per Date of Service,0,999,false,false,false,,,,
+D0251,Extra-oral posterior dental radiographic image,Diagnostic and Preventive,4,Per Date of Service,0,999,false,false,false,,,,
+D0270,Bitewing - single radiographic image,Diagnostic and Preventive,1,Per Date of Service,0,999,false,false,false,,,,
+D0272,Bitewings - two radiographic images,Diagnostic and Preventive,1,Per 6 Months,0,999,false,false,false,Per provider,,,
+D0273,Bitewings - three radiographic images,Diagnostic and Preventive,1,Per 6 Months,0,999,false,false,false,,,,
+D0274,Bitewings - four radiographic images,Diagnostic and Preventive,1,Per 6 Months,10,999,false,false,false,Per provider; age 10+,,,
+D0277,Vertical bitewings - 7 to 8 radiographic images,Diagnostic and Preventive,4,Per Calendar Year,0,999,false,false,false,,,,
+D0330,Panoramic radiographic image,Diagnostic and Preventive,1,Per 36 Months,0,999,false,false,false,Per provider,,,
+D0340,2D cephalometric radiographic image,Diagnostic and Preventive,2,Per 12 Months,0,999,false,false,false,Per provider,,,
+D0350,2D oral/facial photographic image,Diagnostic and Preventive,4,Per Date of Service,0,999,false,false,false,,,,
+D0460,Pulp vitality tests,Diagnostic and Preventive,,,0,999,false,false,false,Included in fee for diagnostic/restorative/endo; not separately payable,,,
+D0470,Diagnostic casts,Diagnostic and Preventive,1,Per Lifetime,0,999,false,false,false,Per provider; for ortho eval only,,,
+D0601,Caries risk assessment - low risk,Diagnostic and Preventive,1,Per 12 Months,0,999,false,false,false,One D0601/D0602/D0603 per 12 mo,,,
+D0602,Caries risk assessment - moderate risk,Diagnostic and Preventive,1,Per 12 Months,0,999,false,false,false,One D0601/D0602/D0603 per 12 mo,,,
+D0603,Caries risk assessment - high risk,Diagnostic and Preventive,1,Per 12 Months,0,999,false,false,false,One D0601/D0602/D0603 per 12 mo,,,
+D0999,Unspecified diagnostic procedure by report,Diagnostic and Preventive,,,0,999,false,false,false,By report,,,
+D1110,Prophylaxis - adult,Diagnostic and Preventive,1,Per 6 Months,0,999,false,false,false,,,5,
+D1120,Prophylaxis - child,Diagnostic and Preventive,1,Per 6 Months,0,999,false,false,false,,,5,
+D1206,Topical application of fluoride varnish,Diagnostic and Preventive,1,Per 6 Months,0,19,false,false,false,Frequency applies toward D1208,,,
+D1208,Topical application of fluoride - excluding varnish,Diagnostic and Preventive,1,Per 6 Months,0,19,false,false,false,Frequency applies toward D1206,,,
+D1310,Nutritional counseling for control of dental disease,Diagnostic and Preventive,,,0,999,false,false,false,,,,
+D1320,Tobacco counseling for prevention of oral disease,Diagnostic and Preventive,,,0,999,false,false,false,Not separately payable,,,
+D1330,Oral hygiene instructions,Diagnostic and Preventive,,,0,999,false,false,false,Not separately payable,,,
+D1351,Sealant - per tooth,Diagnostic and Preventive,1,Per 36 Months,0,999,true,false,false,Per provider; permanent molars without caries or restorations on occlusal,10,15,17
+D1352,Preventive resin restoration - moderate to high caries risk,Diagnostic and Preventive,1,Per 36 Months,0,999,true,false,false,Per provider; permanent tooth,,,
+D1353,Sealant repair - per tooth,Diagnostic and Preventive,,,0,999,true,false,false,,,,
+D1354,Application of caries arresting medicament - per tooth,Diagnostic and Preventive,1,Per 6 Months,0,999,true,false,false,When high caries risk assessment,,,
+D1510,Space maintainer - fixed unilateral per quadrant,Diagnostic and Preventive,1,Per Lifetime,0,17,false,true,false,Per quadrant; through age 17,,,
+D1516,Space maintainer - fixed bilateral maxillary,Diagnostic and Preventive,1,Per Lifetime,0,17,false,false,false,Per arch; through age 17,,,
+D1517,Space maintainer - fixed bilateral mandibular,Diagnostic and Preventive,1,Per Lifetime,0,17,false,false,false,Per arch; through age 17,,,
+D1520,Space maintainer - removable unilateral per quadrant,Diagnostic and Preventive,1,Per Lifetime,0,17,false,true,false,Per quadrant; through age 17,,,
+D1575,Distal shoe space maintainer - fixed unilateral,Diagnostic and Preventive,1,Per Lifetime,0,8,false,true,false,Per quadrant; under age 9,,,
+D4346,Scaling in presence of generalized moderate or severe gingival inflammation,Diagnostic and Preventive,1,Per 6 Months,0,999,false,false,false,Full mouth; after oral evaluation,,,
+D9310,Consultation - diagnostic service by other dentist,Diagnostic and Preventive,,,0,999,false,false,false,,,,
+D9995,Teledentistry - synchronous,Diagnostic and Preventive,,,0,999,false,false,false,Inclusive in overall patient management; not separately payable,,,
+D9996,Teledentistry - asynchronous,Diagnostic and Preventive,,,0,999,false,false,false,Inclusive in overall patient management; not separately payable,,,
+D2140,Amalgam - one surface primary or permanent,Basic,1,Per 12 Months,0,999,true,false,false,Primary teeth 12mo; permanent 36mo,,8,17
+D2150,Amalgam - two surfaces primary or permanent,Basic,1,Per 12 Months,0,999,true,false,false,Primary teeth 12mo; permanent 36mo,,8,17
+D2160,Amalgam - three surfaces primary or permanent,Basic,1,Per 12 Months,0,999,true,false,false,Primary teeth 12mo; permanent 36mo,,8,17
+D2161,Amalgam - four or more surfaces primary or permanent,Basic,1,Per 12 Months,0,999,true,false,false,Primary teeth 12mo; permanent 36mo,,8,17
+D2330,Resin-based composite - one surface anterior,Basic,1,Per 12 Months,0,999,true,false,false,Primary teeth 12mo; permanent 36mo,,22,22
+D2331,Resin-based composite - two surfaces anterior,Basic,1,Per 12 Months,0,999,true,false,false,Primary teeth 12mo; permanent 36mo,,22,22
+D2332,Resin-based composite - three surfaces anterior,Basic,1,Per 12 Months,0,999,true,false,false,Primary teeth 12mo; permanent 36mo,,22,22
+D2335,Resin-based composite - four or more surfaces anterior,Basic,1,Per 12 Months,0,999,true,false,false,Primary teeth 12mo; permanent 36mo,,22,22
+D2390,Resin-based composite crown anterior,Basic,1,Per 12 Months,0,999,true,false,false,Primary teeth 12mo; permanent 36mo,,,
+D2391,Resin-based composite - one surface posterior,Basic,1,Per 12 Months,0,999,true,false,false,Primary teeth 12mo; permanent 36mo,55,65,47
+D2392,Resin-based composite - two surfaces posterior,Basic,1,Per 12 Months,0,999,true,false,false,Primary teeth 12mo; permanent 36mo,55,65,47
+D2393,Resin-based composite - three surfaces posterior,Basic,1,Per 12 Months,0,999,true,false,false,Primary teeth 12mo; permanent 36mo,55,65,47
+D2394,Resin-based composite - four or more surfaces posterior,Basic,1,Per 12 Months,0,999,true,false,false,Primary teeth 12mo; permanent 36mo,55,65,47
+D2920,Re-cement or re-bond crown,Basic,1,Per 12 Months,0,999,true,false,false,Per provider,,,
+D2929,Prefabricated porcelain/ceramic crown - primary tooth,Basic,1,Per 12 Months,0,999,true,false,false,,,,
+D2930,Prefabricated stainless steel crown - primary tooth,Basic,1,Per 12 Months,0,999,true,false,false,,,,
+D2931,Prefabricated stainless steel crown - permanent tooth,Basic,1,Per 36 Months,0,999,true,false,false,,,,
+D2940,Protective restoration,Basic,1,Per 6 Months,0,999,true,false,false,Per tooth per provider; when definitive tx not same DOS,,,
+D2950,Core buildup including any pins,Basic,1,Per Lifetime,0,999,true,false,false,,15,80,105
+D2951,Pin retention - per tooth in addition to restoration,Basic,1,Per Lifetime,0,999,true,false,false,Permanent teeth only,,,
+D2952,Post and core in addition to crown indirectly fabricated,Basic,1,Per Lifetime,0,999,true,false,false,Per tooth,,,
+D2954,Prefabricated post and core in addition to crown,Basic,1,Per Lifetime,0,999,true,false,false,Per tooth,,,
+D4355,Full mouth debridement,Basic,,,13,999,false,false,false,Included in periodontal procedures fee; not separately payable,,,
+D4910,Periodontal maintenance,Basic,1,Per 3 Months,13,999,false,false,false,Only in 24 months following last SRP; age 13+,15,45,78
+D9110,Palliative treatment of dental pain,Basic,1,Per Date of Service,0,999,false,false,false,Per provider regardless of teeth/areas treated,,,
+D9210,Local anesthesia not in conjunction with operative,Basic,1,Per Date of Service,0,999,false,false,false,Per provider,,,
+D9222,Deep sedation/general anesthesia - first 15 min,Basic,,,0,999,false,false,false,For covered oral surgery or selected endo/perio surgical,,,
+D9230,Inhalation of nitrous oxide/analgesia anxiolysis,Basic,,,0,999,false,false,false,,,,
+D3110,Pulp cap - direct,Endodontics Periodontics Oral Surgery,,,0,999,true,false,false,Excluding final restoration,,,
+D3120,Pulp cap - indirect,Endodontics Periodontics Oral Surgery,,,0,999,true,false,false,Excluding final restoration,,,
+D3220,Therapeutic pulpotomy,Endodontics Periodontics Oral Surgery,1,Per Lifetime,0,999,true,false,false,Primary teeth only; once per tooth,,,
+D3310,Endodontic therapy anterior tooth,Endodontics Periodontics Oral Surgery,1,Per Lifetime,0,999,true,false,false,Excluding final restoration; retreatment processed as D3346,55,125,330
+D3320,Endodontic therapy premolar tooth,Endodontics Periodontics Oral Surgery,1,Per Lifetime,0,999,true,false,false,Excluding final restoration; retreatment as D3347,,,
+D3330,Endodontic therapy molar tooth,Endodontics Periodontics Oral Surgery,1,Per Lifetime,0,999,true,false,false,Excluding final restoration; retreatment as D3348,250,365,530
+D3346,Retreatment of previous root canal therapy - anterior,Endodontics Periodontics Oral Surgery,,,0,999,true,false,false,,,,
+D3347,Retreatment of previous root canal therapy - premolar,Endodontics Periodontics Oral Surgery,,,0,999,true,false,false,,,,
+D3348,Retreatment of previous root canal therapy - molar,Endodontics Periodontics Oral Surgery,,,0,999,true,false,false,,,,
+D3410,Apicoectomy - anterior,Endodontics Periodontics Oral Surgery,,,0,999,true,false,false,Retreatment within 24mo by same provider is part of original,,,
+D3421,Apicoectomy - premolar first root,Endodontics Periodontics Oral Surgery,,,0,999,true,false,false,,,,
+D3425,Apicoectomy - molar first root,Endodontics Periodontics Oral Surgery,,,0,999,true,false,false,,,,
+D4210,Gingivectomy or gingivoplasty - 4+ contiguous teeth per quad,Endodontics Periodontics Oral Surgery,1,Per 36 Months,13,999,false,true,false,Per quadrant; age 13+,280,385,595
+D4211,Gingivectomy or gingivoplasty - 1 to 3 teeth per quad,Endodontics Periodontics Oral Surgery,1,Per 36 Months,13,999,false,true,false,Per quadrant; age 13+,,,
+D4260,Osseous surgery - 4+ contiguous teeth per quadrant,Endodontics Periodontics Oral Surgery,1,Per 36 Months,13,999,false,true,false,Per quadrant; age 13+; includes flap,280,385,595
+D4261,Osseous surgery - 1 to 3 teeth per quadrant,Endodontics Periodontics Oral Surgery,1,Per 36 Months,13,999,false,true,false,Per quadrant; age 13+,,,
+D4341,Periodontal scaling and root planing - 4+ teeth per quad,Endodontics Periodontics Oral Surgery,1,Per 24 Months,13,999,false,true,false,Per quadrant; age 13+,25,60,115
+D4342,Periodontal scaling and root planing - 1 to 3 teeth per quad,Endodontics Periodontics Oral Surgery,1,Per 24 Months,13,999,false,true,false,Per quadrant; age 13+,,,
+D2710,Crown - resin-based composite indirect,Major,1,Per 60 Months,13,999,true,false,false,Age 13+,,,
+D2740,Crown - porcelain/ceramic,Major,1,Per 60 Months,13,999,true,false,false,Age 13+,240,395,470
+D2751,Crown - porcelain fused to predominantly base metal,Major,1,Per 60 Months,13,999,true,false,false,Age 13+,240,395,470
+D2791,Crown - full cast predominantly base metal,Major,1,Per 60 Months,13,999,true,false,false,Age 13+,210,395,480
+D5110,Complete denture - maxillary,Major,1,Per 60 Months,0,999,false,false,false,,145,365,575
+D5120,Complete denture - mandibular,Major,1,Per 60 Months,0,999,false,false,false,,145,365,575
+D5130,Immediate denture - maxillary,Major,1,Per Lifetime,0,999,false,false,false,,,,
+D5140,Immediate denture - mandibular,Major,1,Per Lifetime,0,999,false,false,false,,,,
+D5211,Maxillary partial denture - resin base,Major,1,Per 60 Months,0,999,false,false,false,,160,395,670
+D5213,Maxillary partial denture - cast metal framework,Major,1,Per 60 Months,0,999,false,false,false,,160,395,670
+D5214,Mandibular partial denture - cast metal framework,Major,1,Per 60 Months,0,999,false,false,false,,160,395,670
+D6010,Surgical placement of implant body - endosteal,Major,,,0,999,true,false,true,Requires medical necessity documentation and prior auth,,,
+D6040,Surgical placement - eposteal implant,Major,,,0,999,true,false,true,Requires prior authorization,,,
+D6065,Implant supported porcelain/ceramic crown,Major,,,0,999,true,false,true,,,,
+D6245,Pontic - porcelain/ceramic,Major,1,Per 60 Months,13,999,true,false,true,Age 13+; fixed bridges require prior auth,,,
+D6751,Retainer crown - porcelain fused to predominantly base metal,Major,1,Per 60 Months,13,999,true,false,true,Age 13+,,,
+D7111,Extraction coronal remnants - primary tooth,Major,,,0,999,true,false,false,,,,
+D7140,Extraction erupted tooth or exposed root,Major,1,Per Lifetime,0,999,true,false,false,Elevation and/or forceps removal,5,14,53
+D7210,Extraction erupted tooth requiring removal of bone,Major,1,Per Lifetime,0,999,true,false,false,Including mucoperiosteal flap if indicated,5,14,53
+D7220,Removal of impacted tooth - soft tissue,Major,,,0,999,true,false,false,,,,
+D7230,Removal of impacted tooth - partially bony,Major,,,0,999,true,false,false,,,,
+D7240,Removal of impacted tooth - completely bony,Major,,,0,999,true,false,false,,90,120,230
+D7241,Removal of impacted tooth - completely bony with complications,Major,,,0,999,true,false,false,,,,
+D9950,Occlusion analysis - mounted case,Major,1,Per 12 Months,13,999,false,false,false,For diagnosed TMJ; age 13+; permanent dentition,,,
+D9951,Occlusal adjustment - limited,Major,1,Per 12 Months,13,999,false,false,false,Age 13+,,,
+D9952,Occlusal adjustment - complete,Major,1,Per 12 Months,13,999,false,false,false,Age 13+,,,
+D8080,Comprehensive orthodontic treatment of adolescent dentition,Orthodontia,1,Per Lifetime,0,19,false,false,true,Once per patient per phase; requires prior auth; HLD score >=26,1700,1900,1750
+D8210,Removable appliance therapy,Orthodontia,1,Per Lifetime,6,12,false,false,true,Once per patient ages 6-12,,,
+D8220,Fixed appliance therapy,Orthodontia,1,Per Lifetime,6,12,false,false,true,Once per patient ages 6-12,,,
+D8660,Pre-orthodontic treatment examination,Orthodontia,6,Per Lifetime,0,999,false,false,false,Once every 3 months; max 6 lifetime,,,
+D8670,Periodic orthodontic treatment visit,Orthodontia,1,Per 3 Months,0,999,false,false,false,Once per calendar quarter,,,
+D8680,Orthodontic retention - removal of appliances and retainers,Orthodontia,1,Per Lifetime,0,999,false,false,false,Once per arch per authorized phase,,,
+D8696,Repair of orthodontic appliance - maxillary,Orthodontia,1,Per Lifetime,0,999,false,false,false,Once per appliance,,,
+D8697,Repair of orthodontic appliance - mandibular,Orthodontia,1,Per Lifetime,0,999,false,false,false,Once per appliance,,,
+D8703,Replacement of lost or broken retainer - maxillary,Orthodontia,1,Per Lifetime,0,999,false,false,false,Once per arch; within 24mo of retention,,,
+D8704,Replacement of lost or broken retainer - mandibular,Orthodontia,1,Per Lifetime,0,999,false,false,false,Once per arch; within 24mo of retention,,,

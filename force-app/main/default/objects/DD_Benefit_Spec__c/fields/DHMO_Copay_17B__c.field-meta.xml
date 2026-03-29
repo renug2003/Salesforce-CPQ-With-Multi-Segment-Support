@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DHMO_Copay_17B__c</fullName>
+    <label>DHMO Copay 17B</label>
+    <type>Currency</type>
+    <precision>18</precision><scale>2</scale><required>false</required>
+    <description>DeltaCare Core copay</description>
+</CustomField>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Status__c</fullName>
+    <label>Status</label>
+    <type>Picklist</type>
+    <required>true</required><valueSet><restricted>true</restricted><valueSetDefinition><sorted>false</sorted><value><fullName>Received</fullName><default>false</default><label>Received</label></value><value><fullName>Adjudicating</fullName><default>false</default><label>Adjudicating</label></value><value><fullName>Adjudicated</fullName><default>false</default><label>Adjudicated</label></value><value><fullName>Paid</fullName><default>false</default><label>Paid</label></value><value><fullName>Denied</fullName><default>false</default><label>Denied</label></value><value><fullName>Pended</fullName><default>false</default><label>Pended</label></value></valueSetDefinition></valueSet>
+    <description>Processing status</description>
+</CustomField>

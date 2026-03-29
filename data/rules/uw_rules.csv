@@ -1,0 +1,17 @@
+Rule_ID__c,Rule_Name__c,Category__c,Trigger_Point__c,Condition__c,Action__c,Priority__c,Is_Active__c
+UW-001,SIC Code Eligibility,Eligibility,Quote Creation,Account SIC Code in ineligible list,Block quote with ineligible industry message,1,true
+UW-002,Rate Level Assignment,Rating,Quote Creation,SIC Code in Level 2 list,Set Rate Level to Level 2 and use Level 2 rates,2,true
+UW-003,Minimum Group Size,Eligibility,Quote Creation,Eligible employees less than 2,Block quote - minimum 2 eligible employees required,3,true
+UW-004,Deluxe 100 Size Restriction,Plan Eligibility,Plan Selection,Plan is Deluxe 100 AND enrolled count less than 5,Block Deluxe 100 - not available for groups of 2-4,4,true
+UW-005,Participation 100% Contribution,Participation,Enrollment,Employer contribution 100% AND eligible employee not enrolled,Block - all eligible must enroll when 100% employer paid,5,true
+UW-006,Participation 75-99%,Participation,Quote Validation,Contribution 75-99% AND enrolled less than MAX(75% eligible or 5),Warn - insufficient participation - pend for UW review,6,true
+UW-007,Participation 50-74%,Participation,Quote Validation,Contribution 50-74% AND enrolled less than MAX(50% eligible or 5),Warn - insufficient participation,7,true
+UW-008,Voluntary Minimum Enrollment,Participation,Quote Validation,Contribution less than 50% AND enrolled less than 5 (or 2 for 2-4 groups),Block voluntary plan if minimum not met,8,true
+UW-009,Annual Max Restriction Small/Vol,Plan Configuration,Plan Configuration,Group 2-4 employer-paid or voluntary 2-49 AND annual max exceeds limit,Restrict annual max picklist to available values,9,true
+UW-010,Ortho Size Restriction,Plan Configuration,Plan Configuration,Ortho selected AND enrolled count less than 5,Block orthodontics - not available for groups of 2-4,10,true
+UW-011,Adult Ortho Voluntary Block,Plan Configuration,Plan Configuration,Voluntary plan AND enrolled less than 50 AND adult ortho selected,Block adult ortho - requires 50+ enrolled for voluntary,11,true
+UW-012,Dual Choice Minimum,Plan Eligibility,Bundle Selection,Dual choice selected AND enrolled count less than 5,Block dual choice - requires 5+ enrolled employees,12,true
+UW-013,Dual Choice Min Per Plan,Participation,Enrollment Validation,Dual choice AND either plan has less than 2 enrolled,Warn - minimum 2 enrolled per plan in dual choice,13,true
+UW-014,High Turnover Check,Eligibility,Quote Creation,Account turnover percentage greater than 20%,Block - high turnover businesses ineligible,14,true
+UW-015,Dependent Relationship Rule,Eligibility,Quote Creation,Group size is 2 AND both are dependent relationship,Block - group of 2 cannot be dependent relationship,15,true
+UW-016,Core BuyUp Contribution,Plan Configuration,Plan Configuration,Core/BuyUp AND employer contribution less than 50%,Block - Core/Buy-Up requires minimum 50% contribution,16,true

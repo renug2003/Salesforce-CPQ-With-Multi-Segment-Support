@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Product__c</fullName>
+    <label>Product</label>
+    <type>Lookup</type>
+    <referenceTo>DD_Product__c</referenceTo><relationshipLabel>Rate Entries</relationshipLabel><relationshipName>Rate_Entries_Prod</relationshipName><required>false</required>
+    <description>Which product this rate applies to</description>
+</CustomField>

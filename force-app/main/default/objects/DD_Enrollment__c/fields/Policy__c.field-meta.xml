@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Policy__c</fullName>
+    <label>Policy</label>
+    <type>Lookup</type>
+    <referenceTo>DD_Policy__c</referenceTo><relationshipLabel>Enrollments</relationshipLabel><relationshipName>Enrollments_Policy</relationshipName><required>true</required>
+    <description>Active policy</description>
+    <deleteConstraint>Restrict</deleteConstraint>
+</CustomField>

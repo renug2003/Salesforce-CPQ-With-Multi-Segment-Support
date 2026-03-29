@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Quote_Plan_Config__c</fullName>
+    <label>Quote Plan Configuration</label>
+    <referenceTo>DD_Quote_Plan_Config__c</referenceTo>
+    <relationshipLabel>DD Proposals</relationshipLabel>
+    <relationshipName>DD_Proposals_Config</relationshipName>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

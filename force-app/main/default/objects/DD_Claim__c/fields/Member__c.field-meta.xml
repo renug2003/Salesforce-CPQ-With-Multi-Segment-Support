@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Member__c</fullName>
+    <label>Member</label>
+    <type>Lookup</type>
+    <referenceTo>Account</referenceTo><relationshipLabel>Claims as Member</relationshipLabel><relationshipName>Claims_Member</relationshipName><required>true</required>
+    <description>Member person account</description>
+    <deleteConstraint>Restrict</deleteConstraint>
+</CustomField>

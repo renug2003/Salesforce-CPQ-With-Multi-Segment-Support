@@ -1,0 +1,36 @@
+/* Spinner state */
+.spinner-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 160px;
+    gap: 1rem;
+}
+.spinner-msg {
+    font-size: 0.875rem;
+    color: #6D6E71;
+    margin: 0;
+}
+
+/* Error state */
+.error-wrap {
+    padding: 1.5rem;
+}
+
+/*
+ * Full-screen overlay — position:fixed so it covers the entire viewport
+ * (including the quick-action modal and Salesforce chrome) and stays
+ * alive until the user clicks Done or the X button.
+ */
+.wizard-fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9500;
+    background: #ffffff;
+    overflow-y: auto;
+    overflow-x: hidden;
+}

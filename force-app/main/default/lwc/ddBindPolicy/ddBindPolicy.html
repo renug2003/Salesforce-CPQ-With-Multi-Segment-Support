@@ -1,0 +1,101 @@
+<template>
+    <lightning-card>
+        <div slot="title">
+            <span class="slds-icon_container slds-icon-action-approval" style="margin-right:0.5rem;">
+                <lightning-icon icon-name="action:approval" size="small"></lightning-icon>
+            </span>
+            Bind Policy &amp; Issue Group
+        </div>
+
+        <div class="slds-p-around_medium">
+
+            <!-- Loading -->
+            <template lwc:if={isLoading}>
+                <div class="slds-align_absolute-center slds-p-around_large">
+                    <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                </div>
+            </template>
+
+            <!-- Error -->
+            <template lwc:if={errorMessage}>
+                <div class="bind-error">
+                    <lightning-icon icon-name="utility:error" size="x-small"></lightning-icon>
+                    &nbsp;{errorMessage}
+                </div>
+            </template>
+
+            <!-- SUCCESS screen -->
+            <template lwc:if={bound}>
+                <div class="bind-success">
+                    <lightning-icon icon-name="action:approval" size="large" class="success-icon"></lightning-icon>
+                    <h2>Policy Bound Successfully!</h2>
+                    <p>The group and policy records have been created.</p>
+                    <div class="bind-links">
+                        <a href={groupUrl} target="_blank" class="bind-link">
+                            <lightning-icon icon-name="standard:account" size="x-small"></lightning-icon>
+                            &nbsp;{result.groupNumber} — View Group
+                        </a>
+                        <a href={policyUrl} target="_blank" class="bind-link">
+                            <lightning-icon icon-name="standard:orders" size="x-small"></lightning-icon>
+                            &nbsp;{result.policyName} — View Policy
+                        </a>
+                    </div>
+                    <div class="slds-m-top_medium">
+                        <lightning-button label="Done" variant="brand" onclick={handleDone}></lightning-button>
+                    </div>
+                </div>
+            </template>
+
+            <!-- CONFIRMATION screen -->
+            <template lwc:if={showConfirm}>
+                <div class="bind-summary">
+                    <div class="bind-summary-header">Binding will create the following records</div>
+
+                    <div class="bind-section-label">ACCOUNT</div>
+                    <div class="bind-row">
+                        <span class="bind-lbl">Group</span>
+                        <span class="bind-val">{summary.accountName}</span>
+                    </div>
+                    <div class="bind-row">
+                        <span class="bind-lbl">Segment</span>
+                        <span class="bind-val">{summary.segment}</span>
+                    </div>
+                    <div class="bind-row">
+                        <span class="bind-lbl">Group Size</span>
+                        <span class="bind-val">{summary.groupSize} employees</span>
+                    </div>
+                    <div class="bind-row">
+                        <span class="bind-lbl">Total Monthly Premium</span>
+                        <span class="bind-val bind-premium">{formattedTotalPremium}</span>
+                    </div>
+
+                    <div class="bind-section-label">PLANS</div>
+                    <template for:each={summary.plans} for:item="plan">
+                        <div key={plan.configId} class="bind-plan-row">
+                            <span class="bind-plan-name">{plan.planName}</span>
+                            <span class="bind-plan-detail">Eff: {plan.effectiveDate} &nbsp;|&nbsp; Annual Max: ${plan.annualMax}</span>
+                        </div>
+                    </template>
+
+                    <div class="bind-section-label">PROPOSALS TO ACCEPT</div>
+                    <template for:each={summary.proposals} for:item="prop">
+                        <div key={prop.id} class="bind-prop-row">
+                            <lightning-input type="checkbox" label={prop.name}
+                                data-id={prop.id}
+                                checked
+                                onchange={handleProposalToggle}>
+                            </lightning-input>
+                        </div>
+                    </template>
+                </div>
+
+                <div class="bind-actions">
+                    <lightning-button label="Cancel" variant="neutral" onclick={handleCancel}></lightning-button>
+                    <lightning-button label="Bind &amp; Issue Policy" variant="brand"
+                        disabled={isLoading} onclick={handleBind}></lightning-button>
+                </div>
+            </template>
+
+        </div>
+    </lightning-card>
+</template>

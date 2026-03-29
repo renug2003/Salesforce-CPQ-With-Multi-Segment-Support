@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DnP_Waiver_Selected__c</fullName>
+    <label>D and P Waiver Selected</label>
+    <type>Checkbox</type>
+    <defaultValue>false</defaultValue>
+    <description>Agent toggled D&P Maximum Waiver</description>
+</CustomField>

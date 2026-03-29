@@ -1,0 +1,713 @@
+<template>
+    <!-- Hidden PDF builder — loaded once, called imperatively -->
+    <c-dd-proposal-pdf-builder></c-dd-proposal-pdf-builder>
+    <div class="aqc-root">
+
+        <!-- ── Loading spinner ──────────────────────────────────────────────── -->
+        <template lwc:if={isLoading}>
+            <div class="aqc-spinner-overlay">
+                <lightning-spinner alternative-text="Loading..." size="medium" variant="brand"></lightning-spinner>
+            </div>
+        </template>
+
+        <!-- ── Error banner ─────────────────────────────────────────────────── -->
+        <template lwc:if={errorMessage}>
+            <div class="aqc-error-banner" role="alert">
+                <lightning-icon icon-name="utility:error" size="x-small" class="aqc-error-icon"></lightning-icon>
+                <span class="aqc-error-text">{errorMessage}</span>
+                <button class="aqc-error-close" onclick={handleDismissError} aria-label="Dismiss error">✕</button>
+            </div>
+        </template>
+
+        <!-- ── Two-column layout ─────────────────────────────────────────────── -->
+        <div class="aqc-layout">
+
+            <!-- ════════════════════════════════════════════════════════════════ -->
+            <!-- LEFT: Context Panel                                              -->
+            <!-- ════════════════════════════════════════════════════════════════ -->
+            <aside class="aqc-context">
+
+                <!-- Account card -->
+                <div class="ctx-card">
+                    <div class="ctx-card-header">
+                        <lightning-icon icon-name="standard:account" size="x-small" class="ctx-icon"></lightning-icon>
+                        Account
+                    </div>
+                    <div class="ctx-field">
+                        <span class="ctx-lbl">Name</span>
+                        <a href={ctxAccountUrl} target="_blank" class="ctx-link">{ctxAccountName}</a>
+                    </div>
+                    <div class="ctx-field">
+                        <span class="ctx-lbl">Industry</span>
+                        <span class="ctx-val">{ctxIndustry}</span>
+                    </div>
+                    <div class="ctx-field">
+                        <span class="ctx-lbl">Address</span>
+                        <span class="ctx-val">{ctxAddress}</span>
+                    </div>
+                    <div class="ctx-field">
+                        <span class="ctx-lbl">Phone</span>
+                        <span class="ctx-val">{ctxPhone}</span>
+                    </div>
+                    <div class="ctx-field">
+                        <span class="ctx-lbl">Group Size</span>
+                        <span class="ctx-val">{ctxGroupSize}</span>
+                    </div>
+                    <div class="ctx-field">
+                        <span class="ctx-lbl">SIC Code</span>
+                        <span class="ctx-val">{ctxSicCode}</span>
+                    </div>
+                    <div class="ctx-field">
+                        <span class="ctx-lbl">Segment</span>
+                        <span class="ctx-val">{ctxSegment}</span>
+                    </div>
+                </div>
+
+                <!-- Opportunity card -->
+                <div class="ctx-card">
+                    <div class="ctx-card-header">
+                        <lightning-icon icon-name="standard:opportunity" size="x-small" class="ctx-icon"></lightning-icon>
+                        Opportunity
+                    </div>
+                    <div class="ctx-field">
+                        <span class="ctx-lbl">Name</span>
+                        <a href={ctxOppUrl} target="_blank" class="ctx-link">{ctxOppName}</a>
+                    </div>
+                    <div class="ctx-field">
+                        <span class="ctx-lbl">Quote Status</span>
+                        <span class="ctx-status-badge">{ctxQuoteStatus}</span>
+                    </div>
+                </div>
+
+                <!-- Selected Plans summary (shows once plans are chosen) -->
+                <template lwc:if={ctxHasSelected}>
+                    <div class="ctx-card">
+                        <div class="ctx-card-header">
+                            <lightning-icon icon-name="utility:check" size="x-small" class="ctx-icon"></lightning-icon>
+                            Selected Plans
+                        </div>
+                        <template for:each={ctxSelectedPlans} for:item="plan">
+                            <div class="ctx-plan-row" key={plan.productId}>
+                                <span class="ctx-plan-dot"></span>
+                                <span class="ctx-plan-name">{plan.productName}</span>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+
+            </aside>
+
+            <!-- ════════════════════════════════════════════════════════════════ -->
+            <!-- RIGHT: Quote Wizard                                              -->
+            <!-- ════════════════════════════════════════════════════════════════ -->
+            <main class="aqc-wizard">
+
+                <!-- Step progress bar -->
+                <div class="aqc-steps">
+                    <template for:each={steps} for:item="step">
+                        <div class={step.cssClass} key={step.num}>
+                            <div class="step-circle">{step.num}</div>
+                            <div class="step-label">{step.label}</div>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- ── STEP 1: Effective Date ──────────────────────────────── -->
+                <template lwc:if={isStep1}>
+                    <div class="aqc-step-content">
+                        <h2 class="aqc-step-title">Coverage Effective Date</h2>
+                        <p class="aqc-step-desc">
+                            Coverage begins on the <strong>1st of the selected month</strong>.
+                            Select a month at least 30 days from today.
+                        </p>
+                        <div class="aqc-date-wrap">
+                            <lightning-input
+                                type="month"
+                                label="Effective Month"
+                                value={effectiveMonth}
+                                min={minEffectiveMonth}
+                                onchange={handleEffectiveDateChange}
+                                required
+                                class="aqc-date-input">
+                            </lightning-input>
+                        </div>
+                        <template lwc:if={effectiveDateDisplay}>
+                            <div class="aqc-date-confirm">
+                                <lightning-icon icon-name="utility:event" size="x-small"></lightning-icon>
+                                Coverage effective: <strong>{effectiveDateDisplay}</strong>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+
+                <!-- ── STEP 2: Census ──────────────────────────────────────── -->
+                <template lwc:if={isStep2}>
+                    <div class="aqc-step-content">
+                        <h2 class="aqc-step-title">Employee Census</h2>
+                        <p class="aqc-step-desc">
+                            Enter the number of employees enrolling in each coverage tier (minimum 2 total),
+                            or switch to <strong>Detailed Entry</strong> to add employees individually.
+                        </p>
+
+                        <!-- Mode toggle -->
+                        <div class="census-mode-toggle">
+                            <button
+                                class={censusQuickBtnClass}
+                                onclick={handleCensusModeQuick}>
+                                <lightning-icon icon-name="utility:groups" size="x-small"></lightning-icon>
+                                Quick Entry
+                            </button>
+                            <button
+                                class={censusDetailedBtnClass}
+                                onclick={handleCensusModeDetailed}>
+                                <lightning-icon icon-name="utility:list" size="x-small"></lightning-icon>
+                                Detailed Entry
+                            </button>
+                        </div>
+
+                        <!-- ── Quick Mode: tier count inputs ── -->
+                        <template lwc:if={isCensusQuick}>
+                            <div class="census-quick-table">
+                                <div class="census-quick-header">
+                                    <span class="cq-col cq-col-tier">Coverage Tier</span>
+                                    <span class="cq-col cq-col-desc">Description</span>
+                                    <span class="cq-col cq-col-count">Employees</span>
+                                </div>
+                                <template for:each={censusRows} for:item="row">
+                                    <div class="census-quick-row" key={row.tier}>
+                                        <span class="cq-col cq-col-tier">
+                                            <span class="tier-badge">{row.tier}</span>
+                                        </span>
+                                        <span class="cq-col cq-col-desc">{row.label}</span>
+                                        <span class="cq-col cq-col-count">
+                                            <input
+                                                type="number"
+                                                class="census-count-input"
+                                                min="0"
+                                                value={row.count}
+                                                data-tier={row.tier}
+                                                onchange={handleCensusCountChange}
+                                                placeholder="0" />
+                                        </span>
+                                    </div>
+                                </template>
+                                <div class="census-quick-total">
+                                    <span class="cq-total-label">Total Enrolled</span>
+                                    <span class="cq-total-value">{totalEnrolled}</span>
+                                </div>
+                            </div>
+                        </template>
+
+                        <!-- ── Detailed Mode: individual employee rows ── -->
+                        <template lwc:if={isCensusDetailed}>
+                            <div class="census-detailed-wrap">
+                                <div class="census-detailed-actions">
+                                    <lightning-button
+                                        label="+ Add Employee"
+                                        variant="neutral"
+                                        onclick={handleAddEmployee}
+                                        class="census-add-btn">
+                                    </lightning-button>
+                                    <span class="census-count-badge">{totalEnrolled} employee(s)</span>
+                                </div>
+
+                                <template lwc:if={hasDetailedEmps}>
+                                    <div class="census-emp-table">
+                                        <div class="census-emp-header">
+                                            <span class="emp-col emp-col-name">Employee Name</span>
+                                            <span class="emp-col emp-col-tier">Tier</span>
+                                            <span class="emp-col emp-col-gender">Gender</span>
+                                            <span class="emp-col emp-col-dob">Date of Birth</span>
+                                            <span class="emp-col emp-col-hire">Hire Date</span>
+                                            <span class="emp-col emp-col-zip">ZIP</span>
+                                            <span class="emp-col emp-col-action"></span>
+                                        </div>
+                                        <template for:each={detailedEmps} for:item="emp">
+                                            <div class="census-emp-row" key={emp._id}>
+                                                <span class="emp-col emp-col-name">
+                                                    <input
+                                                        type="text"
+                                                        class="emp-field-input"
+                                                        value={emp.employeeName}
+                                                        placeholder="Full Name"
+                                                        data-emp-id={emp._id}
+                                                        data-field="employeeName"
+                                                        onchange={handleEmpFieldChange} />
+                                                </span>
+                                                <span class="emp-col emp-col-tier">
+                                                    <select
+                                                        class="emp-field-select"
+                                                        data-emp-id={emp._id}
+                                                        data-field="enrollmentTier"
+                                                        onchange={handleEmpFieldChange}>
+                                                        <option value="EE">EE</option>
+                                                        <option value="ES">ES</option>
+                                                        <option value="EC">EC</option>
+                                                        <option value="EF">EF</option>
+                                                    </select>
+                                                </span>
+                                                <span class="emp-col emp-col-gender">
+                                                    <select
+                                                        class="emp-field-select"
+                                                        data-emp-id={emp._id}
+                                                        data-field="gender"
+                                                        onchange={handleEmpFieldChange}>
+                                                        <option value="">—</option>
+                                                        <option value="M">M</option>
+                                                        <option value="F">F</option>
+                                                    </select>
+                                                </span>
+                                                <span class="emp-col emp-col-dob">
+                                                    <input
+                                                        type="date"
+                                                        class="emp-field-input"
+                                                        value={emp.dob}
+                                                        data-emp-id={emp._id}
+                                                        data-field="dob"
+                                                        onchange={handleEmpFieldChange} />
+                                                </span>
+                                                <span class="emp-col emp-col-hire">
+                                                    <input
+                                                        type="date"
+                                                        class="emp-field-input"
+                                                        value={emp.hireDate}
+                                                        data-emp-id={emp._id}
+                                                        data-field="hireDate"
+                                                        onchange={handleEmpFieldChange} />
+                                                </span>
+                                                <span class="emp-col emp-col-zip">
+                                                    <input
+                                                        type="text"
+                                                        class="emp-field-input"
+                                                        value={emp.zipCode}
+                                                        placeholder="ZIP"
+                                                        maxlength="10"
+                                                        data-emp-id={emp._id}
+                                                        data-field="zipCode"
+                                                        onchange={handleEmpFieldChange} />
+                                                </span>
+                                                <span class="emp-col emp-col-action">
+                                                    <button
+                                                        class="emp-remove-btn"
+                                                        data-emp-id={emp._id}
+                                                        onclick={handleRemoveEmployee}
+                                                        title="Remove employee">✕</button>
+                                                </span>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </template>
+
+                                <template lwc:else>
+                                    <div class="census-empty-hint">
+                                        <lightning-icon icon-name="utility:info" size="x-small"></lightning-icon>
+                                        Click <strong>+ Add Employee</strong> to add individual employees.
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+
+                        <!-- Tier legend -->
+                        <div class="census-tier-legend">
+                            <span class="legend-item"><strong>EE</strong> Employee Only</span>
+                            <span class="legend-item"><strong>ES</strong> Employee + Spouse</span>
+                            <span class="legend-item"><strong>EC</strong> Employee + Children</span>
+                            <span class="legend-item"><strong>EF</strong> Employee + Family</span>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- ── STEP 3: Plan Selection ──────────────────────────────── -->
+                <template lwc:if={isStep3}>
+                    <div class="aqc-step-content">
+                        <h2 class="aqc-step-title">Select Plans</h2>
+                        <p class="aqc-step-desc">
+                            Choose up to 3 plans to compare and configure.
+                            Click a coverage category to see procedure code details.
+                        </p>
+
+                        <div class="aqc-selection-bar">
+                            <span class={counterBadgeClass}>{selectedCount} / 3 selected</span>
+                        </div>
+
+                        <!-- No plans returned -->
+                        <template lwc:if={noPlansFound}>
+                            <div class="plans-empty">
+                                <lightning-icon icon-name="utility:info" size="small"></lightning-icon>
+                                <p>No eligible plans found for this account. Please verify the segment and group size, then try again.</p>
+                            </div>
+                        </template>
+
+                        <template for:each={planFamilyGroups} for:item="family">
+                            <div class="aqc-family-section" key={family.familyName}>
+                                <div class="aqc-family-header">{family.familyName}</div>
+                                <div class="aqc-plans-grid">
+                                    <template for:each={family.plans} for:item="plan">
+                                        <div class={plan.cardClass} key={plan.productId}>
+
+                                            <!-- GREEN header: checkbox + plan name + network -->
+                                            <div class="plan-card-top">
+                                                <label class="plan-checkbox-label">
+                                                    <input
+                                                        type="checkbox"
+                                                        class="plan-checkbox"
+                                                        data-id={plan.productId}
+                                                        data-selling-model={plan.sellingModelId}
+                                                        checked={plan.isSelected}
+                                                        disabled={plan.isDisabled}
+                                                        onchange={handlePlanToggle}/>
+                                                    <span class="plan-name">{plan.productName}</span>
+                                                </label>
+                                                <span class="network-badge">{plan.networkName}</span>
+                                            </div>
+
+                                            <!-- Coverage body -->
+                                            <div class="plan-card-body">
+
+                                                <!-- Loading -->
+                                                <template lwc:if={plan.benefitsLoading}>
+                                                    <div class="coverage-loading">
+                                                        <lightning-spinner size="x-small" alternative-text="Loading..."></lightning-spinner>
+                                                        <span>Loading coverage&hellip;</span>
+                                                    </div>
+                                                </template>
+
+                                                <!-- Coverage categories — each is clickable to expand CDT details -->
+                                                <template lwc:if={plan.benefitsLoaded}>
+                                                    <template lwc:if={plan.noCoverageData}>
+                                                        <div class="coverage-empty">
+                                                            <lightning-icon icon-name="utility:info" size="x-small"></lightning-icon>
+                                                            No coverage details available for this plan.
+                                                        </div>
+                                                    </template>
+                                                    <template lwc:else>
+                                                        <div class="coverage-section-label">Coverage Benefits</div>
+                                                        <template for:each={plan.coverageSpecs} for:item="spec">
+                                                            <div class="coverage-row"
+                                                                 key={spec.coverageName}
+                                                                 data-plan-id={plan.productId}
+                                                                 data-coverage={spec.coverageName}
+                                                                 onclick={handleToggleCoverage}>
+                                                                <div class="coverage-row-header">
+                                                                    <lightning-icon
+                                                                        icon-name={spec.chevron}
+                                                                        size="x-small"
+                                                                        class="cov-chevron">
+                                                                    </lightning-icon>
+                                                                    <span class="cov-name">{spec.coverageName}</span>
+                                                                    <span class="cov-pcts">
+                                                                        <span class="chip chip-ppo">PPO {spec.coinsurancePPO}%</span>
+                                                                        <span class="chip chip-nonppo">{spec.coinsuranceNonPPO}%</span>
+                                                                    </span>
+                                                                </div>
+                                                                <template lwc:if={spec.isExpanded}>
+                                                                    <div class="benefit-detail-list">
+                                                                        <template for:each={spec.benefits} for:item="ben">
+                                                                            <div class="benefit-row" key={ben.cdtCode}>
+                                                                                <span class="cdt-code">{ben.cdtCode}</span>
+                                                                                <span class="cdt-desc">{ben.cdtDescription}</span>
+                                                                                <template lwc:if={ben.frequencyLimit}>
+                                                                                    <span class="freq-badge">{ben.frequencyLimit}&times;/{ben.frequencyPeriod}</span>
+                                                                                </template>
+                                                                            </div>
+                                                                        </template>
+                                                                    </div>
+                                                                </template>
+                                                            </div>
+                                                        </template>
+                                                    </template>
+                                                </template>
+
+                                                <!-- Not loaded yet -->
+                                                <template lwc:if={plan.showLoadHint}>
+                                                    <div class="coverage-not-loaded">Loading coverage details&hellip;</div>
+                                                </template>
+
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+
+                <!-- ── STEP 4: Configure Plans ─────────────────────────────── -->
+                <template lwc:if={isStep4}>
+                    <div class="aqc-step-content">
+                        <h2 class="aqc-step-title">Configure Plans</h2>
+                        <p class="aqc-step-desc">
+                            Adjust plan options for each selected plan.
+                            Changes are saved when you click <strong>Calculate Rates</strong>.
+                        </p>
+                        <div class="config-columns">
+                            <template for:each={planConfigs} for:item="cfg">
+                                <div class="config-col" key={cfg.configId}>
+                                    <div class="config-col-header">
+                                        <span class="config-plan-name">{cfg.productName}</span>
+                                        <span class="config-network">{cfg.networkName}</span>
+                                    </div>
+
+                                    <!-- Annual Maximum -->
+                                    <lightning-combobox
+                                        label="Annual Maximum"
+                                        value={cfg._annualMax}
+                                        options={cfg.annualMaxOptions}
+                                        data-config-id={cfg.configId}
+                                        data-field="annualMax"
+                                        onchange={handleConfigChange}
+                                        class="cfg-field">
+                                    </lightning-combobox>
+
+                                    <!-- Employer Contribution -->
+                                    <lightning-input
+                                        type="number"
+                                        label="Employer Contribution %"
+                                        value={cfg._contributionPct}
+                                        min={cfg.minContributionPct}
+                                        max="100"
+                                        step="5"
+                                        formatter="percent-fixed"
+                                        data-config-id={cfg.configId}
+                                        data-field="contributionPct"
+                                        onchange={handleConfigChange}
+                                        class="cfg-field">
+                                    </lightning-input>
+
+                                    <!-- Orthodontia -->
+                                    <template lwc:if={cfg.orthoAvailable}>
+                                        <div class="cfg-toggle-row">
+                                            <lightning-input
+                                                type="toggle"
+                                                label="Include Orthodontia"
+                                                checked={cfg._orthoEnabled}
+                                                data-config-id={cfg.configId}
+                                                onchange={handleOrthoToggle}
+                                                class="cfg-field">
+                                            </lightning-input>
+                                        </div>
+                                        <template lwc:if={cfg._orthoEnabled}>
+                                            <lightning-combobox
+                                                label="Ortho Type"
+                                                value={cfg._orthoType}
+                                                options={cfg.orthoTypeOptions}
+                                                data-config-id={cfg.configId}
+                                                data-field="orthoType"
+                                                onchange={handleConfigChange}
+                                                class="cfg-field">
+                                            </lightning-combobox>
+                                            <lightning-combobox
+                                                label="Ortho Maximum"
+                                                value={cfg._orthoMax}
+                                                options={cfg.orthoMaxOptions}
+                                                data-config-id={cfg.configId}
+                                                data-field="orthoMax"
+                                                onchange={handleConfigChange}
+                                                class="cfg-field">
+                                            </lightning-combobox>
+                                        </template>
+                                    </template>
+
+                                    <!-- D&P Waiver -->
+                                    <div class="cfg-toggle-row">
+                                        <lightning-input
+                                            type="toggle"
+                                            label="D&amp;P Waiver"
+                                            checked={cfg._dnpWaiver}
+                                            data-config-id={cfg.configId}
+                                            onchange={handleDnpToggle}
+                                            class="cfg-field">
+                                        </lightning-input>
+                                    </div>
+
+                                    <!-- Waiting Period Waiver -->
+                                    <div class="cfg-toggle-row">
+                                        <lightning-input
+                                            type="toggle"
+                                            label="Waiting Period Waiver"
+                                            checked={cfg._waitingPeriodWaived}
+                                            data-config-id={cfg.configId}
+                                            onchange={handleWaitingPeriodToggle}
+                                            class="cfg-field">
+                                        </lightning-input>
+                                    </div>
+
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- ── STEP 5: Rate Summary ────────────────────────────────── -->
+                <template lwc:if={isStep5}>
+                    <div class="aqc-step-content">
+                        <h2 class="aqc-step-title">Rate Summary</h2>
+                        <p class="aqc-step-desc">Monthly premium breakdown for each selected plan.</p>
+                        <div class="rate-columns">
+                            <template for:each={rateResults} for:item="r">
+                                <div class="rate-col" key={r.configId}>
+                                    <div class="rate-col-header">{r.productName}</div>
+                                    <div class="rate-total-box">
+                                        <div class="rate-total-amt">{r.totalFmt}</div>
+                                        <div class="rate-total-lbl">Monthly Premium</div>
+                                    </div>
+                                    <!-- Contribution split bar -->
+                                    <div class="split-bar-wrap">
+                                        <div class="split-bar">
+                                            <div class="split-employer" style={r.employerWidth}>
+                                                <span class="split-label">Employer {r.employerPct}%</span>
+                                            </div>
+                                            <div class="split-employee" style={r.employeeWidth}>
+                                                <span class="split-label">Employee {r.employeePct}%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Tier table -->
+                                    <table class="tier-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Tier</th>
+                                                <th class="right">Count</th>
+                                                <th class="right">Rate</th>
+                                                <th class="right">Premium</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <template for:each={r.tierRates} for:item="t">
+                                                <tr key={t.tier}>
+                                                    <td>{t.tier}</td>
+                                                    <td class="right">{t.enrolledCount}</td>
+                                                    <td class="right">{t.rateFmt}</td>
+                                                    <td class="right">{t.premiumFmt}</td>
+                                                </tr>
+                                            </template>
+                                            <tr class="tier-total">
+                                                <td colspan="3">Total</td>
+                                                <td class="right">{r.totalFmt}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- ── STEP 6: Create Proposals ───────────────────────────── -->
+                <template lwc:if={isStep6}>
+                    <div class="aqc-step-content">
+
+                        <template lwc:if={proposalsCreated}>
+                            <!-- Success state -->
+                            <div class="proposals-success">
+                                <div class="success-icon-wrap">
+                                    <lightning-icon icon-name="utility:success" size="large" class="success-icon"></lightning-icon>
+                                </div>
+                                <h2 class="success-title">Proposals Created!</h2>
+                                <p class="success-desc">
+                                    {createdProposals.length} proposal(s) have been created with PDF attachments
+                                    linked to the quote record.
+                                </p>
+                                <div class="proposal-links">
+                                    <template for:each={createdProposals} for:item="prop">
+                                        <div class="proposal-link-row" key={prop.id}>
+                                            <lightning-icon icon-name="doctype:pdf" size="small"></lightning-icon>
+                                            <a href={prop.propUrl} target="_blank" class="prop-link">{prop.name}</a>
+                                            <template lwc:if={prop.pdfUrl}>
+                                                <a href={prop.pdfUrl} target="_blank" class="pdf-dl-link">
+                                                    <lightning-icon icon-name="utility:download" size="x-small"></lightning-icon>
+                                                    Download PDF
+                                                </a>
+                                            </template>
+                                        </div>
+                                    </template>
+                                </div>
+                                <div class="success-done-wrap">
+                                    <lightning-button
+                                        label="Done"
+                                        variant="brand"
+                                        onclick={handleDone}
+                                        class="success-done-btn">
+                                    </lightning-button>
+                                </div>
+                            </div>
+                        </template>
+
+                        <template lwc:else>
+                            <!-- Selection state -->
+                            <h2 class="aqc-step-title">Create Proposals</h2>
+                            <p class="aqc-step-desc">
+                                Select the plans to include in the proposal package.
+                                A separate proposal with PDF will be created for each selected plan.
+                            </p>
+                            <div class="proposal-select-list">
+                                <template for:each={planConfigs} for:item="cfg">
+                                    <div class="proposal-plan-row" key={cfg.configId}>
+                                        <lightning-input
+                                            type="checkbox"
+                                            label={cfg.productName}
+                                            checked={cfg._includeInProposal}
+                                            data-config-id={cfg.configId}
+                                            onchange={handleProposalToggle}>
+                                        </lightning-input>
+                                        <span class="prop-plan-network">{cfg.networkName}</span>
+                                    </div>
+                                </template>
+                            </div>
+                            <div class="proposal-count-note">
+                                <lightning-icon icon-name="utility:info" size="x-small"></lightning-icon>
+                                {proposalSelectionCount} plan(s) selected — {proposalSelectionCount} PDF(s) will be generated.
+                            </div>
+                        </template>
+
+                    </div>
+                </template>
+
+                <!-- ── Navigation buttons ──────────────────────────────────── -->
+                <div class="aqc-nav">
+                    <!-- Left: Back -->
+                    <template lwc:if={showBack}>
+                        <lightning-button
+                            label="← Back"
+                            variant="neutral"
+                            onclick={handleBack}
+                            class="nav-back">
+                        </lightning-button>
+                    </template>
+
+                    <!-- Centre: Save actions -->
+                    <template lwc:if={showSaveButtons}>
+                        <div class="nav-save-group">
+                            <lightning-button
+                                label="Save"
+                                variant="neutral"
+                                disabled={isLoading}
+                                onclick={handleSave}
+                                class="nav-save">
+                            </lightning-button>
+                            <lightning-button
+                                label="Save &amp; Close"
+                                variant="neutral"
+                                disabled={isLoading}
+                                onclick={handleSaveAndClose}
+                                class="nav-save-close">
+                            </lightning-button>
+                        </div>
+                    </template>
+
+                    <!-- Right: Next / primary action -->
+                    <template lwc:if={showNext}>
+                        <lightning-button
+                            label={nextLabel}
+                            variant="brand"
+                            disabled={isNextDisabled}
+                            onclick={handleNext}
+                            class="nav-next">
+                        </lightning-button>
+                    </template>
+                </div>
+
+            </main>
+        </div>
+    </div>
+</template>

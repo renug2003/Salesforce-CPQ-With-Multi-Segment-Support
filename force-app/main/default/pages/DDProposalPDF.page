@@ -1,0 +1,449 @@
+<apex:page controller="DDProposalPDFController" renderAs="pdf" applyBodyTag="false" showHeader="false" sidebar="false" standardStylesheets="false">
+<html>
+<head>
+<meta charset="UTF-8"/>
+<style>
+  /* ── Reset ─────────────────────────────────────────────────────────────── */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10pt;
+    color: #333333;
+    background: #ffffff;
+  }
+
+  /* ── Page margins ──────────────────────────────────────────────────────── */
+  @page { margin: 0.6in 0.6in 0.8in 0.6in; }
+
+  /* ── Header band ───────────────────────────────────────────────────────── */
+  .pdf-header {
+    background: linear-gradient(135deg, #003B71 0%, #00609A 55%, #0085CA 100%);
+    color: #ffffff;
+    padding: 16px 24px 14px 24px;
+    margin-bottom: 18px;
+  }
+  .pdf-header-inner {
+    display: table;
+    width: 100%;
+  }
+  .pdf-header-logo-cell {
+    display: table-cell;
+    vertical-align: middle;
+    width: 68px;
+    padding-right: 16px;
+  }
+  .pdf-header-text-cell {
+    display: table-cell;
+    vertical-align: middle;
+  }
+  .pdf-header .org-name {
+    font-size: 17pt;
+    font-weight: bold;
+    letter-spacing: 0.3px;
+  }
+  .pdf-header .tag-line {
+    font-size: 9pt;
+    color: #B8D4E8;
+    margin-top: 3px;
+  }
+  .pdf-header .prop-ref {
+    font-size: 9.5pt;
+    color: #ffffff;
+    margin-top: 6px;
+    font-weight: bold;
+    border-top: 1px solid rgba(255,255,255,0.25);
+    padding-top: 6px;
+  }
+
+  /* ── Section header ────────────────────────────────────────────────────── */
+  .section-hdr {
+    background: #00609A;
+    color: #ffffff;
+    padding: 5px 10px;
+    font-size: 9pt;
+    font-weight: bold;
+    margin-bottom: 6px;
+    margin-top: 14px;
+  }
+
+  /* ── Two-column info table ─────────────────────────────────────────────── */
+  .info-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 4px;
+  }
+  .info-table td {
+    padding: 4px 8px;
+    vertical-align: top;
+    border-bottom: 1px solid #E8E8E8;
+  }
+  .info-table td.lbl {
+    width: 38%;
+    color: #6D6E71;
+    font-size: 9pt;
+  }
+  .info-table td.val {
+    font-weight: bold;
+    font-size: 9pt;
+  }
+
+  /* ── Data table ────────────────────────────────────────────────────────── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 4px;
+  }
+  .data-table th {
+    background: #003B71;
+    color: #ffffff;
+    padding: 5px 8px;
+    text-align: left;
+    font-size: 8.5pt;
+  }
+  .data-table td {
+    padding: 4px 8px;
+    border-bottom: 1px solid #E8E8E8;
+    font-size: 9pt;
+  }
+  .data-table tr.alt { background: #F7F7F7; }
+  .data-table tr.total-row td {
+    background: #EEF4FA;
+    font-weight: bold;
+    border-top: 2px solid #00609A;
+  }
+  .data-table td.right { text-align: right; }
+
+  /* ── Two-column layout using table ─────────────────────────────────────── */
+  .two-col-table { width: 100%; border-collapse: collapse; }
+  .two-col-table td { vertical-align: top; padding: 0 8px 0 0; width: 50%; }
+  .two-col-table td:last-child { padding-right: 0; }
+
+  /* ── Highlight boxes ────────────────────────────────────────────────────── */
+  .highlight-box {
+    border: 1px solid #0085CA;
+    border-radius: 3px;
+    padding: 8px 12px;
+    background: #F0F8FF;
+    margin-bottom: 8px;
+  }
+  .highlight-box .hl-label { font-size: 8pt; color: #6D6E71; }
+  .highlight-box .hl-value { font-size: 13pt; font-weight: bold; color: #003B71; }
+
+  /* ── Footer (fixed at bottom) ───────────────────────────────────────────── */
+  .pdf-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-top: 1px solid #E8E8E8;
+    padding: 5px 24px;
+    font-size: 7.5pt;
+    color: #6D6E71;
+    background: #ffffff;
+  }
+  .pdf-footer table { width: 100%; }
+  .pdf-footer td.right { text-align: right; }
+
+  /* ── Badge ──────────────────────────────────────────────────────────────── */
+  .badge {
+    display: inline-block;
+    background: #0085CA;
+    color: #ffffff;
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-size: 8pt;
+  }
+  .badge-green { background: #78BE20; }
+</style>
+</head>
+<body>
+
+<!-- ── Footer (defined first so it's behind content) ─────────────────────── -->
+<div class="pdf-footer">
+  <table>
+    <tr>
+      <td>This proposal is valid for 30 days from the date of issue and is subject to final underwriting review.</td>
+      <td class="right">Delta Dental of California &bull; deltadentalins.com &bull; {!proposalDate}</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ── Header ─────────────────────────────────────────────────────────────── -->
+<div class="pdf-header">
+  <div class="pdf-header-inner">
+    <!-- Delta Dental SVG Logo -->
+    <div class="pdf-header-logo-cell">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" width="56" height="56" aria-label="Delta Dental">
+        <!-- Outer circle background -->
+        <circle cx="30" cy="30" r="29" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+        <!-- Delta triangle -->
+        <polygon points="30,8 54,50 6,50" fill="none" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"/>
+        <!-- Inner highlight line -->
+        <polygon points="30,17 47,46 13,46" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.3)" stroke-width="1" stroke-linejoin="round"/>
+        <!-- DD text -->
+        <text x="30" y="41" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="bold"
+              fill="#ffffff" text-anchor="middle" letter-spacing="1">dd</text>
+      </svg>
+    </div>
+    <!-- Header text -->
+    <div class="pdf-header-text-cell">
+      <div class="org-name">Delta Dental of California</div>
+      <div class="tag-line">Small Business Dental Insurance Proposal</div>
+      <apex:outputText rendered="{!proposal != null}">
+        <div class="prop-ref">
+          Proposal: {!proposal.Name}
+          &nbsp;&nbsp;&bull;&nbsp;&nbsp;
+          Plan: {!proposal.Plan_Name__c}
+        </div>
+      </apex:outputText>
+    </div>
+  </div>
+</div>
+
+<apex:outputPanel rendered="{!proposal == null}">
+  <p style="color:#E03C31;font-weight:bold;padding:20px;">
+    Error: Proposal record not found. Please check the record Id.
+  </p>
+</apex:outputPanel>
+
+<apex:outputPanel rendered="{!proposal != null}">
+
+  <!-- ── Key Highlights row ──────────────────────────────────────────────── -->
+  <table class="two-col-table" style="margin-bottom:0;">
+    <tr>
+      <td>
+        <div class="highlight-box">
+          <div class="hl-label">Effective Date</div>
+          <div class="hl-value">
+            <apex:outputText value="{0,date,MMMM d, yyyy}">
+              <apex:param value="{!proposal.Effective_Date__c}"/>
+            </apex:outputText>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="highlight-box">
+          <div class="hl-label">Annual Maximum</div>
+          <div class="hl-value">
+            <apex:outputText value="{0,number,$#,##0}">
+              <apex:param value="{!proposal.Quote_Plan_Config__r.Selected_Annual_Max__c}"/>
+            </apex:outputText>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="highlight-box">
+          <div class="hl-label">Monthly Premium</div>
+          <div class="hl-value">{!totalPremiumFmt}</div>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+  <!-- ── Two-column: Client Info + Plan Details ──────────────────────────── -->
+  <table class="two-col-table">
+    <tr>
+      <!-- Left: Client Info -->
+      <td>
+        <div class="section-hdr">Client Information</div>
+        <table class="info-table">
+          <tr>
+            <td class="lbl">Account</td>
+            <td class="val">{!proposal.Opportunity__r.Account.Name}</td>
+          </tr>
+          <apex:outputPanel rendered="{!proposal.Opportunity__r.Account.Industry != null}">
+          <tr>
+            <td class="lbl">Industry</td>
+            <td class="val">{!proposal.Opportunity__r.Account.Industry}</td>
+          </tr>
+          </apex:outputPanel>
+          <apex:outputPanel rendered="{!proposal.Opportunity__r.Account.BillingStreet != null}">
+          <tr>
+            <td class="lbl">Address</td>
+            <td class="val">
+              {!proposal.Opportunity__r.Account.BillingStreet}<br/>
+              {!proposal.Opportunity__r.Account.BillingCity},
+              {!proposal.Opportunity__r.Account.BillingState}
+              {!proposal.Opportunity__r.Account.BillingPostalCode}
+            </td>
+          </tr>
+          </apex:outputPanel>
+          <apex:outputPanel rendered="{!proposal.Opportunity__r.Account.Phone != null}">
+          <tr>
+            <td class="lbl">Phone</td>
+            <td class="val">{!proposal.Opportunity__r.Account.Phone}</td>
+          </tr>
+          </apex:outputPanel>
+          <apex:outputPanel rendered="{!proposal.Opportunity__r.Account.Group_Size__c != null}">
+          <tr>
+            <td class="lbl">Group Size</td>
+            <td class="val">{!proposal.Opportunity__r.Account.Group_Size__c} employees</td>
+          </tr>
+          </apex:outputPanel>
+          <apex:outputPanel rendered="{!proposal.Opportunity__r.Account.SIC_Code__c != null}">
+          <tr>
+            <td class="lbl">SIC Code</td>
+            <td class="val">{!proposal.Opportunity__r.Account.SIC_Code__c}</td>
+          </tr>
+          </apex:outputPanel>
+          <tr>
+            <td class="lbl">Segment</td>
+            <td class="val">{!proposal.Opportunity__r.Account.Market_Segment__c}</td>
+          </tr>
+          <tr>
+            <td class="lbl">Quote Reference</td>
+            <td class="val">{!proposal.Quote__r.Name}</td>
+          </tr>
+        </table>
+      </td>
+
+      <!-- Right: Plan Details -->
+      <td>
+        <div class="section-hdr">Plan Details</div>
+        <table class="info-table">
+          <tr>
+            <td class="lbl">Plan Name</td>
+            <td class="val">{!proposal.Quote_Plan_Config__r.Product__r.Product_Name__c}</td>
+          </tr>
+          <tr>
+            <td class="lbl">Network</td>
+            <td class="val">{!proposal.Quote_Plan_Config__r.Product__r.Network_Fee_Basis__c}</td>
+          </tr>
+          <tr>
+            <td class="lbl">Annual Maximum</td>
+            <td class="val">
+              <apex:outputText value="{0,number,$#,##0}">
+                <apex:param value="{!proposal.Quote_Plan_Config__r.Selected_Annual_Max__c}"/>
+              </apex:outputText>
+            </td>
+          </tr>
+          <tr>
+            <td class="lbl">Individual Deductible</td>
+            <td class="val">
+              <apex:outputText value="{0,number,$#,##0}">
+                <apex:param value="{!proposal.Quote_Plan_Config__r.Product__r.Deductible_Individual__c}"/>
+              </apex:outputText>
+            </td>
+          </tr>
+          <tr>
+            <td class="lbl">Family Deductible</td>
+            <td class="val">
+              <apex:outputText value="{0,number,$#,##0}">
+                <apex:param value="{!proposal.Quote_Plan_Config__r.Product__r.Deductible_Family__c}"/>
+              </apex:outputText>
+            </td>
+          </tr>
+          <tr>
+            <td class="lbl">Employer Contribution</td>
+            <td class="val">{!proposal.Quote_Plan_Config__r.Employer_Contribution_Pct__c}%</td>
+          </tr>
+          <apex:outputPanel rendered="{!proposal.Quote_Plan_Config__r.DnP_Waiver_Selected__c}">
+          <tr>
+            <td class="lbl">D&amp;P Waiver</td>
+            <td class="val"><span class="badge badge-green">Included</span></td>
+          </tr>
+          </apex:outputPanel>
+          <apex:outputPanel rendered="{!proposal.Quote_Plan_Config__r.Selected_Ortho_Type__c != null}">
+          <tr>
+            <td class="lbl">Orthodontia</td>
+            <td class="val">
+              {!proposal.Quote_Plan_Config__r.Selected_Ortho_Type__c}
+              &nbsp;—&nbsp;
+              <apex:outputText value="{0,number,$#,##0}">
+                <apex:param value="{!proposal.Quote_Plan_Config__r.Selected_Ortho_Max__c}"/>
+              </apex:outputText> max
+            </td>
+          </tr>
+          </apex:outputPanel>
+          <apex:outputPanel rendered="{!proposal.Quote_Plan_Config__r.Waiting_Period_Waived__c}">
+          <tr>
+            <td class="lbl">Waiting Period</td>
+            <td class="val"><span class="badge">Waived</span></td>
+          </tr>
+          </apex:outputPanel>
+          <apex:outputPanel rendered="{!proposal.Quote_Plan_Config__r.Rate_Guarantee_Months__c != null}">
+          <tr>
+            <td class="lbl">Rate Guarantee</td>
+            <td class="val">{!proposal.Quote_Plan_Config__r.Rate_Guarantee_Months__c} months</td>
+          </tr>
+          </apex:outputPanel>
+        </table>
+      </td>
+    </tr>
+  </table>
+
+  <!-- ── Coverage Summary ──────────────────────────────────────────────────── -->
+  <apex:outputPanel rendered="{!coverageRows.size > 0}">
+    <div class="section-hdr">Coverage Summary</div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Coverage Category</th>
+          <th>PPO Network</th>
+          <th>Non-PPO Network</th>
+          <th>Deductible Applies</th>
+        </tr>
+      </thead>
+      <tbody>
+        <apex:repeat value="{!coverageRows}" var="cr">
+          <tr>
+            <td>{!cr.coverageName}</td>
+            <td>{!cr.ppoPct}</td>
+            <td>{!cr.nonPpoPct}</td>
+            <td>
+              <apex:outputText value="Yes" rendered="{!cr.deductibleApplies}"/>
+              <apex:outputText value="No"  rendered="{!!cr.deductibleApplies}"/>
+            </td>
+          </tr>
+        </apex:repeat>
+      </tbody>
+    </table>
+  </apex:outputPanel>
+
+  <!-- ── Premium Rate Summary ───────────────────────────────────────────────── -->
+  <apex:outputPanel rendered="{!rateRows.size > 0}">
+    <div class="section-hdr">Monthly Premium Summary</div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Coverage Tier</th>
+          <th>Enrolled</th>
+          <th>Monthly Rate</th>
+          <th class="right">Employer Share</th>
+          <th class="right">Employee Share</th>
+          <th class="right">Monthly Premium</th>
+        </tr>
+      </thead>
+      <tbody>
+        <apex:repeat value="{!rateRows}" var="row">
+          <tr>
+            <td>{!row.tier}</td>
+            <td>{!row.enrolled}</td>
+            <td>{!row.monthlyRate}</td>
+            <td class="right">{!row.employerShare}</td>
+            <td class="right">{!row.employeeShare}</td>
+            <td class="right">{!row.monthlyPremium}</td>
+          </tr>
+        </apex:repeat>
+        <tr class="total-row">
+          <td colspan="5" style="text-align:right;">Total Monthly Premium</td>
+          <td class="right">{!totalPremiumFmt}</td>
+        </tr>
+      </tbody>
+    </table>
+  </apex:outputPanel>
+
+  <!-- ── Disclaimer ────────────────────────────────────────────────────────── -->
+  <div style="margin-top:18px; border-top:1px solid #E8E8E8; padding-top:8px; font-size:7.5pt; color:#6D6E71;">
+    This proposal has been prepared based on the information provided and is subject to change.
+    Coverage is subject to all terms, conditions, limitations, and exclusions of the plan contract.
+    Rates are guaranteed for the rate guarantee period shown above from the effective date.
+    Delta Dental of California is a not-for-profit dental service corporation and a member of the
+    Delta Dental Plans Association.
+  </div>
+
+</apex:outputPanel>
+
+</body>
+</html>
+</apex:page>

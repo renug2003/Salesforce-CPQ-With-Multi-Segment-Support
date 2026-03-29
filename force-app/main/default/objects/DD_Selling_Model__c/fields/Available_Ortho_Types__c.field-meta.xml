@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Available_Ortho_Types__c</fullName>
+    <label>Available Ortho Types</label>
+    <type>Text</type>
+    <length>100</length><required>false</required><unique>false</unique><externalId>false</externalId>
+    <description>Comma-separated: Child Only,Child and Adult,Not Available</description>
+</CustomField>

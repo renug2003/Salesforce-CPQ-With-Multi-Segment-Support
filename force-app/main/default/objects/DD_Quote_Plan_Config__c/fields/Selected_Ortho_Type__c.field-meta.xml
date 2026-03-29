@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Selected_Ortho_Type__c</fullName>
+    <label>Selected Ortho Type</label>
+    <type>Picklist</type>
+    <required>false</required><valueSet><restricted>true</restricted><valueSetDefinition><sorted>false</sorted><value><fullName>Child Only</fullName><default>false</default><label>Child Only</label></value><value><fullName>Child and Adult</fullName><default>false</default><label>Child and Adult</label></value><value><fullName>None</fullName><default>false</default><label>None</label></value></valueSetDefinition></valueSet>
+    <description>Agent-selected ortho option</description>
+</CustomField>

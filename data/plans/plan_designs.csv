@@ -1,0 +1,16 @@
+Plan_Name__c,Plan_Family__c,Network_Fee_Basis__c,Product_Line__c,DnP_Coinsurance_PPO__c,DnP_Coinsurance_NonPPO__c,Basic_Coinsurance_PPO__c,Basic_Coinsurance_NonPPO__c,Endo_Perio_OS_Coinsurance_PPO__c,Endo_Perio_OS_Coinsurance_NonPPO__c,Major_Coinsurance_PPO__c,Major_Coinsurance_NonPPO__c,Deductible_Individual__c,Deductible_Family__c,Min_Group_Size__c,Max_Group_Size__c,Is_Active__c,SmileWay_Eligible__c,DnP_Max_Waiver_Available__c,Ortho_Available__c,Voluntary_Available__c,State__c
+Deluxe 100,PPO Deluxe,PPO Plus Premier,DPPO,100,100,100,80,100,80,60,50,50,150,5,99,true,true,true,true,true,CA
+Deluxe 200,PPO Deluxe,PPO Plus Premier,DPPO,100,100,90,80,90,80,60,50,50,150,2,99,true,true,true,true,true,CA
+Deluxe 300,PPO Deluxe,PPO,DPPO,100,100,90,80,90,80,60,50,50,150,2,99,true,true,true,true,true,CA
+Advantage 100,PPO Advantage,PPO Plus Premier,DPPO,100,100,80,80,80,80,60,50,50,150,2,99,true,true,true,true,true,CA
+Advantage 200,PPO Advantage,PPO Plus Premier,DPPO,100,100,80,80,80,80,50,50,50,150,2,99,true,true,true,true,true,CA
+Advantage 300,PPO Advantage,PPO Plus Premier,DPPO,100,80,80,60,80,60,50,50,50,150,2,99,true,true,true,true,true,CA
+Advantage 400,PPO Advantage,PPO,DPPO,100,100,80,80,80,80,50,50,50,150,2,99,true,true,true,true,true,CA
+Core 100,PPO Core,PPO,DPPO,100,100,80,80,50,50,50,50,50,150,2,99,true,true,false,false,true,CA
+Core 201,PPO Core,PPO,DPPO,100,100,80,80,0,0,0,0,50,150,2,99,true,false,false,false,true,CA
+DeltaCare USA 11A,DeltaCare USA,DeltaCare USA,DHMO,100,0,100,0,100,0,100,0,0,0,2,99,true,true,false,true,true,CA
+DeltaCare USA 15B,DeltaCare USA,DeltaCare USA,DHMO,100,0,100,0,100,0,100,0,0,0,2,99,true,true,false,true,true,CA
+DeltaCare USA 17B,DeltaCare USA,DeltaCare USA,DHMO,100,0,100,0,100,0,100,0,0,0,2,99,true,true,false,true,true,CA
+Children's Dental PPO,Pediatric,PPO,DPPO,100,90,80,70,50,50,50,50,75,150,2,99,true,false,false,true,true,CA
+Family Dental PPO,Pediatric,PPO,DPPO,100,90,80,70,50,50,50,50,50,150,2,99,true,false,false,true,true,CA
+DeltaCare USA Children's DHMO,Pediatric,DeltaCare USA,DHMO,100,0,100,0,100,0,100,0,0,0,2,99,true,false,false,true,true,CA

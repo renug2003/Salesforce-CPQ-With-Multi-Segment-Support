@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Industry_Rate_Level__c</fullName>
+    <label>Industry Rate Level</label>
+    <type>Picklist</type>
+    <required>false</required>
+    <description>Resolved rate level from the SIC code mapping. Populated automatically by the SIC validation flow. Level 2 industries carry a rate surcharge.</description>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value><fullName>Level 1</fullName><default>false</default><label>Level 1</label></value>
+            <value><fullName>Level 2</fullName><default>false</default><label>Level 2</label></value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

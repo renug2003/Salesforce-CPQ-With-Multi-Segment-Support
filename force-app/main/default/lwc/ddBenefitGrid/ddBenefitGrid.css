@@ -1,0 +1,321 @@
+/* ── Card shell ──────────────────────────────────────────────────────────── */
+:host {
+    display: block;
+}
+
+.dd-benefit-grid-card {
+    --slds-c-card-color-background: #ffffff;
+}
+
+/* ── Card title ──────────────────────────────────────────────────────────── */
+.dd-card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #003B71;
+}
+
+.dd-title-icon {
+    flex-shrink: 0;
+}
+
+/* ── Loading state ───────────────────────────────────────────────────────── */
+.dd-loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 48px 24px;
+    gap: 16px;
+}
+
+.dd-loading-text {
+    color: #6D6E71;
+    font-size: 0.875rem;
+}
+
+/* ── Error state ─────────────────────────────────────────────────────────── */
+.dd-error-panel {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 24px;
+    background: #fff4f3;
+    border-left: 4px solid #E03C31;
+    border-radius: 4px;
+    margin: 16px 24px;
+}
+
+.dd-error-message {
+    color: #E03C31;
+    font-size: 0.875rem;
+}
+
+/* ── Body wrapper ────────────────────────────────────────────────────────── */
+.dd-benefit-grid-body {
+    padding: 0 0 16px 0;
+}
+
+/* ── Product header bar ──────────────────────────────────────────────────── */
+.dd-product-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 16px 24px 12px;
+    border-bottom: 1px solid #E8E8E8;
+    background: linear-gradient(135deg, #003B71 0%, #00609A 100%);
+}
+
+.dd-product-name {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.01em;
+}
+
+.dd-product-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.dd-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+.dd-badge--line {
+    background: rgba(255,255,255,0.2);
+    color: #ffffff;
+}
+
+.dd-badge--category {
+    background: rgba(255,255,255,0.15);
+    color: #ffffff;
+}
+
+.dd-badge--dhmo {
+    background: #F47B20;
+    color: #ffffff;
+}
+
+.dd-badge--ppo {
+    background: #78BE20;
+    color: #ffffff;
+}
+
+/* ── Coverage spec meta bar ──────────────────────────────────────────────── */
+.dd-spec-meta-bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 10px 16px;
+    background: #F7F7F7;
+    border-bottom: 1px solid #E8E8E8;
+    font-size: 0.8125rem;
+    color: #333333;
+}
+
+.dd-spec-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.dd-spec-meta-label {
+    color: #6D6E71;
+}
+
+.dd-spec-meta-item--count {
+    margin-left: auto;
+    color: #6D6E71;
+    font-style: italic;
+    font-size: 0.75rem;
+}
+
+/* ── Search bar ──────────────────────────────────────────────────────────── */
+.dd-search-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-bottom: 1px solid #E8E8E8;
+    background: #ffffff;
+}
+
+.dd-search-icon {
+    flex-shrink: 0;
+    color: #6D6E71;
+}
+
+.dd-search-input {
+    flex: 1;
+    border: 1px solid #E8E8E8;
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 0.875rem;
+    color: #333333;
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+.dd-search-input:focus {
+    border-color: #0085CA;
+    box-shadow: 0 0 0 2px rgba(0, 133, 202, 0.15);
+}
+
+.dd-search-clear {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    color: #6D6E71;
+    display: flex;
+    align-items: center;
+    border-radius: 50%;
+    transition: background 0.15s;
+}
+
+.dd-search-clear:hover {
+    background: #E8E8E8;
+}
+
+/* ── Table container ─────────────────────────────────────────────────────── */
+.dd-table-container {
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: 520px;
+}
+
+/* ── Benefit table ───────────────────────────────────────────────────────── */
+.dd-benefit-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8125rem;
+    color: #333333;
+    table-layout: auto;
+}
+
+/* Sticky header */
+.dd-benefit-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+/* ── Header cells ─────────────────────────────────────────────────────────── */
+.dd-th {
+    background: #003B71;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 10px 12px;
+    text-align: left;
+    white-space: nowrap;
+    border-right: 1px solid rgba(255,255,255,0.12);
+    user-select: none;
+}
+
+.dd-th:last-child {
+    border-right: none;
+}
+
+.dd-th--center {
+    text-align: center;
+}
+
+.dd-th--sortable {
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.dd-th--sortable:hover {
+    background: #00609A;
+}
+
+.dd-th--sorted {
+    background: #00609A;
+}
+
+.dd-sort-arrow {
+    font-size: 0.625rem;
+    opacity: 0.85;
+    margin-left: 3px;
+}
+
+/* ── Data rows ───────────────────────────────────────────────────────────── */
+.dd-row-even {
+    background: #ffffff;
+}
+
+.dd-row-odd {
+    background: #F7F7F7;
+}
+
+.dd-row-even:hover,
+.dd-row-odd:hover {
+    background: #EEF6FB;
+}
+
+/* ── Data cells ──────────────────────────────────────────────────────────── */
+.dd-td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #E8E8E8;
+    vertical-align: top;
+}
+
+.dd-td--code {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-weight: 600;
+    color: #00609A;
+    white-space: nowrap;
+    font-size: 0.8125rem;
+}
+
+.dd-td--description {
+    min-width: 220px;
+}
+
+.dd-td--center {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.dd-td--copay {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    color: #003B71;
+    font-weight: 600;
+}
+
+.dd-td--notes {
+    color: #6D6E71;
+    font-style: italic;
+    font-size: 0.75rem;
+    min-width: 140px;
+}
+
+/* Empty state */
+.dd-no-results {
+    text-align: center;
+    padding: 32px;
+    color: #6D6E71;
+    font-style: italic;
+}
+
+/* ── Tab overrides ───────────────────────────────────────────────────────── */
+.dd-coverage-tabs {
+    --slds-c-tab-scoped-color-border: #003B71;
+}

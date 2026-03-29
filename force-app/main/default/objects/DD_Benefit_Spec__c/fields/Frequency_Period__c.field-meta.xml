@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Frequency_Period__c</fullName>
+    <label>Frequency Period</label>
+    <type>Picklist</type>
+    <required>false</required><valueSet><restricted>true</restricted><valueSetDefinition><sorted>false</sorted><value><fullName>Per Calendar Year</fullName><default>false</default><label>Per Calendar Year</label></value><value><fullName>Per 6 Months</fullName><default>false</default><label>Per 6 Months</label></value><value><fullName>Per 12 Months</fullName><default>false</default><label>Per 12 Months</label></value><value><fullName>Per 24 Months</fullName><default>false</default><label>Per 24 Months</label></value><value><fullName>Per 36 Months</fullName><default>false</default><label>Per 36 Months</label></value><value><fullName>Per 60 Months</fullName><default>false</default><label>Per 60 Months</label></value><value><fullName>Per Lifetime</fullName><default>false</default><label>Per Lifetime</label></value><value><fullName>Per Date of Service</fullName><default>false</default><label>Per Date of Service</label></value></valueSetDefinition></valueSet>
+    <description>Time period for frequency limit</description>
+</CustomField>

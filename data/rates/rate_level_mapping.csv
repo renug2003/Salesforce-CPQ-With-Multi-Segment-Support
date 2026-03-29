@@ -1,0 +1,58 @@
+SIC_Code_Start__c,SIC_Code_End__c,Rate_Level__c,Industry_Description__c,Eligible__c
+0100,0760,Level 1,Agriculture Forestry Fishing,true
+0761,0783,N/A,Seasonal Employees - Farm Labor,false
+0784,0999,Level 1,Agriculture Forestry Fishing,true
+1000,1499,Level 1,Mining Oil and Gas Extraction,true
+1500,1799,Level 1,Construction Contractors,true
+2000,2699,Level 1,Manufacturing,true
+2700,2799,Level 1,Printing and Publishing,true
+2800,3910,Level 1,Manufacturing,true
+3911,3915,Level 2,Jewelry Manufacturing,true
+3916,3999,Level 1,Manufacturing,true
+4000,4799,Level 1,Transportation,true
+4800,4899,Level 1,Communication,true
+4900,4999,Level 1,Utilities,true
+5000,5199,Level 1,Wholesale Trade,true
+5200,5510,Level 1,Retail,true
+5511,5599,Level 2,Auto Dealerships,true
+5610,5699,Level 1,Retail Apparel,true
+5712,5736,Level 1,Retail Home Furnishings,true
+5800,5899,Level 2,Restaurants,true
+5912,5999,Level 1,Retail Other,true
+6000,6299,Level 1,Finance Banks Securities,true
+6300,6499,Level 2,Insurance Carriers Brokers,true
+6500,6799,Level 2,Real Estate,true
+7000,7099,Level 2,Hotels and Lodging,true
+7100,7220,Level 1,Services Laundry Personal,true
+7221,7221,Level 2,Photographic Studios Portrait,true
+7222,7230,Level 1,Services,true
+7231,7241,N/A,Beauty and Barber Shops,false
+7242,7290,Level 1,Services,true
+7291,7299,Level 2,Services Tax Return Misc,true
+7300,7318,Level 1,Services Advertising Misc,true
+7319,7319,Level 2,Services NEC,true
+7320,7360,Level 1,Services Computer Mailing,true
+7361,7363,N/A,Employment Agencies,false
+7364,7388,Level 1,Services Equipment Personnel,true
+7389,7389,N/A,Misc Business Services NEC,false
+7390,7630,Level 1,Services Misc,true
+7631,7631,Level 2,Watch Clock Jewelry Repair,true
+7632,7799,Level 1,Services Recreation,true
+7800,7999,Level 2,Amusement Recreation Entertainment,true
+8000,8059,Level 2,Medical Groups,true
+8062,8069,Level 1,Hospitals,true
+8021,8021,N/A,Dental Offices,false
+8071,8072,N/A,Dental Labs and Medical Labs,false
+8082,8099,Level 2,Medical Groups Other,true
+8100,8199,Level 2,Legal Services,true
+8200,8299,Level 1,Educational Services,true
+8300,8399,Level 1,Social Services,true
+8400,8499,Level 1,Museums Art Galleries,true
+8600,8699,N/A,Membership Organizations,false
+8700,8799,Level 1,Engineering Accounting Management,true
+8811,8811,N/A,Private Households,false
+8999,8999,N/A,Misc Services NEC,false
+9000,9720,Level 1,Public Administration,true
+9721,9721,N/A,International Affairs,false
+9722,9998,Level 1,Public Administration Other,true
+9999,9999,Level 2,Management Carve-out,true

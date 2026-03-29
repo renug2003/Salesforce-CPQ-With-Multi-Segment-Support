@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Attribute_Definition__c</fullName>
+    <label>Attribute Definition</label>
+    <type>Lookup</type>
+    <referenceTo>DD_Attribute_Definition__c</referenceTo><relationshipLabel>Product Attributes</relationshipLabel><relationshipName>Product_Attrs_Def</relationshipName><required>true</required>
+    <description>Attribute definition</description>
+    <deleteConstraint>Restrict</deleteConstraint>
+</CustomField>

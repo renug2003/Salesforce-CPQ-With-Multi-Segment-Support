@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Enrollment__c</fullName>
+    <label>Enrollment</label>
+    <type>MasterDetail</type>
+    <referenceTo>DD_Enrollment__c</referenceTo><relationshipLabel>Dependents</relationshipLabel><relationshipName>Dependents</relationshipName><relationshipOrder>0</relationshipOrder><reparentableMasterDetail>false</reparentableMasterDetail><writeRequiresMasterRead>false</writeRequiresMasterRead>
+    <description>Parent enrollment</description>
+</CustomField>

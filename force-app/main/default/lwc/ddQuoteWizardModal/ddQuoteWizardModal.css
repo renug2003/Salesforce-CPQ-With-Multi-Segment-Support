@@ -1,0 +1,4 @@
+/* Remove default modal body padding so the wizard uses the full width */
+lightning-modal-body {
+    padding: 0;
+}

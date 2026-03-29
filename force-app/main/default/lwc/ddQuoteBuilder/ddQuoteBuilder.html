@@ -1,0 +1,939 @@
+<template>
+    <div class="dd-wizard-container">
+
+        <!-- ── HERO BANNER ──────────────────────────────────── -->
+        <div class="dd-hero">
+            <div class="dd-hero__brand-row">
+                <lightning-icon icon-name="custom:custom85" size="small" class="dd-hero__icon"></lightning-icon>
+                <span class="dd-hero__brand">Delta Dental of California</span>
+            </div>
+            <h1 class="dd-hero__title">Small Business Quote Builder</h1>
+            <p class="dd-hero__subtitle">Build a custom dental plan for your group — 6 easy steps</p>
+        </div>
+
+        <!-- ── PROGRESS INDICATOR ───────────────────────────── -->
+        <div class="dd-progress-wrapper">
+            <div class="dd-prog-bar">
+                <template for:each={progressSteps} for:item="step">
+                    <div key={step.key} class={step.stepClass}>
+                        <div class={step.circleClass}>
+                            <template lwc:if={step.isCompleted}>&#x2713;</template>
+                            <template lwc:else>{step.value}</template>
+                        </div>
+                        <span class="dd-prog-label">{step.label}</span>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- ── ERROR BANNER ─────────────────────────────────── -->
+        <template lwc:if={errorMessage}>
+            <div class="dd-error-banner" role="alert">
+                <lightning-icon icon-name="utility:error" size="x-small" class="dd-error-banner__icon"></lightning-icon>
+                <span class="dd-error-banner__text">{errorMessage}</span>
+                <button class="dd-error-banner__close" onclick={clearError} aria-label="Dismiss error">&#x2715;</button>
+            </div>
+        </template>
+
+        <!-- ── LOADING SPINNER ──────────────────────────────── -->
+        <template lwc:if={isLoading}>
+            <div class="dd-loading-overlay">
+                <lightning-spinner alternative-text="Loading" size="medium" variant="brand"></lightning-spinner>
+            </div>
+        </template>
+
+        <!-- ══════════════════════════════════════════════════ -->
+        <!-- STEP 1 — CENSUS                                   -->
+        <!-- ══════════════════════════════════════════════════ -->
+        <template lwc:if={isStep1}>
+            <lightning-card class="dd-step-card">
+                <div slot="title" class="dd-card-title">
+                    <lightning-icon icon-name="standard:people" size="small"></lightning-icon>
+                    <span>Employee Census</span>
+                </div>
+
+                <div class="dd-step-body">
+
+                    <!-- Tier Count Tiles (always visible) -->
+                    <div class="dd-tier-counts">
+                        <div class="dd-tier-count">
+                            <span class="dd-tier-count__code">EE</span>
+                            <span class="dd-tier-count__label">Employee Only</span>
+                            <span class="dd-tier-count__value">{censusData.eeCount}</span>
+                        </div>
+                        <div class="dd-tier-count">
+                            <span class="dd-tier-count__code">ES</span>
+                            <span class="dd-tier-count__label">Emp + Spouse</span>
+                            <span class="dd-tier-count__value">{censusData.esCount}</span>
+                        </div>
+                        <div class="dd-tier-count">
+                            <span class="dd-tier-count__code">EC</span>
+                            <span class="dd-tier-count__label">Emp + Child(ren)</span>
+                            <span class="dd-tier-count__value">{censusData.ecCount}</span>
+                        </div>
+                        <div class="dd-tier-count">
+                            <span class="dd-tier-count__code">EF</span>
+                            <span class="dd-tier-count__label">Emp + Family</span>
+                            <span class="dd-tier-count__value">{censusData.efCount}</span>
+                        </div>
+                        <div class="dd-tier-count dd-tier-count--total">
+                            <span class="dd-tier-count__code">TOT</span>
+                            <span class="dd-tier-count__label">Total Enrolled</span>
+                            <span class="dd-tier-count__value">{censusData.totalEnrolled}</span>
+                        </div>
+                    </div>
+
+                    <!-- Mode Toggle Buttons -->
+                    <div class="dd-census-modes">
+                        <button
+                            class={censusUploadBtnClass}
+                            data-mode="upload"
+                            onclick={handleCensusMode}>
+                            &#x2B06; Upload CSV
+                        </button>
+                        <button
+                            class={censusManualBtnClass}
+                            data-mode="manual"
+                            onclick={handleCensusMode}>
+                            &#x270F; Enter Manually
+                        </button>
+                    </div>
+
+                    <!-- Census Records Table — always visible when records exist -->
+                    <template lwc:if={hasCensusRecords}>
+                        <div class="dd-census-table-wrapper">
+                            <lightning-datatable
+                                key-field="Id"
+                                data={censusData.records}
+                                columns={censusColumns}
+                                hide-checkbox-column
+                                resize-column-disabled>
+                            </lightning-datatable>
+                        </div>
+                    </template>
+
+                    <!-- Upload Mode -->
+                    <template lwc:if={isCensusModeUpload}>
+                        <div class="dd-upload-section">
+                            <p class="dd-upload-section__hint">
+                                Upload a CSV with columns: Employee Name, Tier (EE/ES/EC/EF), Gender, DOB, Hire Date, Zip Code
+                            </p>
+                            <lightning-file-upload
+                                label="Upload Census CSV"
+                                name="censusFile"
+                                accept=".csv"
+                                record-id={accountId}
+                                onuploadfinished={handleCensusUpload}>
+                            </lightning-file-upload>
+                        </div>
+
+                        <template lwc:if={hasNoCensusRecords}>
+                            <div class="dd-empty-state">
+                                <lightning-icon icon-name="utility:people" size="large" class="dd-empty-state__icon"></lightning-icon>
+                                <p>No census records found. Upload a CSV or switch to manual entry.</p>
+                            </div>
+                        </template>
+                    </template>
+
+                    <!-- Manual Entry Mode -->
+                    <template lwc:if={isCensusModeManual}>
+                        <div class="dd-manual-table-wrapper">
+                            <table class="dd-manual-table">
+                                <thead>
+                                    <tr>
+                                        <th>Employee Name</th>
+                                        <th>Tier</th>
+                                        <th>Gender</th>
+                                        <th>Date of Birth</th>
+                                        <th>Hire Date</th>
+                                        <th>Zip Code</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={manualRows} for:item="row">
+                                        <tr key={row.id}>
+                                            <td>
+                                                <lightning-input
+                                                    type="text"
+                                                    variant="label-hidden"
+                                                    label="Employee Name"
+                                                    value={row.employeeName}
+                                                    placeholder="Full name"
+                                                    data-row-id={row.id}
+                                                    data-field="employeeName"
+                                                    onchange={handleManualFieldChange}>
+                                                </lightning-input>
+                                            </td>
+                                            <td>
+                                                <lightning-combobox
+                                                    variant="label-hidden"
+                                                    label="Tier"
+                                                    value={row.enrollmentTier}
+                                                    options={tierOptions}
+                                                    placeholder="Tier"
+                                                    data-row-id={row.id}
+                                                    data-field="enrollmentTier"
+                                                    onchange={handleManualFieldChange}>
+                                                </lightning-combobox>
+                                            </td>
+                                            <td>
+                                                <lightning-combobox
+                                                    variant="label-hidden"
+                                                    label="Gender"
+                                                    value={row.gender}
+                                                    options={genderOptions}
+                                                    placeholder="Gender"
+                                                    data-row-id={row.id}
+                                                    data-field="gender"
+                                                    onchange={handleManualFieldChange}>
+                                                </lightning-combobox>
+                                            </td>
+                                            <td>
+                                                <lightning-input
+                                                    type="date"
+                                                    variant="label-hidden"
+                                                    label="DOB"
+                                                    value={row.dob}
+                                                    data-row-id={row.id}
+                                                    data-field="dob"
+                                                    onchange={handleManualFieldChange}>
+                                                </lightning-input>
+                                            </td>
+                                            <td>
+                                                <lightning-input
+                                                    type="date"
+                                                    variant="label-hidden"
+                                                    label="Hire Date"
+                                                    value={row.hireDate}
+                                                    data-row-id={row.id}
+                                                    data-field="hireDate"
+                                                    onchange={handleManualFieldChange}>
+                                                </lightning-input>
+                                            </td>
+                                            <td>
+                                                <lightning-input
+                                                    type="text"
+                                                    variant="label-hidden"
+                                                    label="Zip Code"
+                                                    value={row.zipCode}
+                                                    placeholder="Zip"
+                                                    data-row-id={row.id}
+                                                    data-field="zipCode"
+                                                    onchange={handleManualFieldChange}>
+                                                </lightning-input>
+                                            </td>
+                                            <td>
+                                                <lightning-button-icon
+                                                    icon-name="utility:delete"
+                                                    variant="bare"
+                                                    alternative-text="Remove row"
+                                                    data-row-id={row.id}
+                                                    onclick={handleRemoveRow}>
+                                                </lightning-button-icon>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                            <div class="dd-manual-actions">
+                                <lightning-button
+                                    label="+ Add Employee"
+                                    onclick={handleAddManualRow}>
+                                </lightning-button>
+                                <div class="dd-btn-green">
+                                    <lightning-button
+                                        label="Save Census"
+                                        variant="brand"
+                                        onclick={handleSaveCensus}
+                                        disabled={isLoading}>
+                                    </lightning-button>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+                </div>
+            </lightning-card>
+        </template>
+
+        <!-- ══════════════════════════════════════════════════ -->
+        <!-- STEP 2 — PLAN SELECTION                           -->
+        <!-- ══════════════════════════════════════════════════ -->
+        <template lwc:if={isStep2}>
+            <lightning-card class="dd-step-card">
+                <div slot="title" class="dd-card-title">
+                    <lightning-icon icon-name="standard:product" size="small"></lightning-icon>
+                    <span>Select Dental Plans</span>
+                    <div class="dd-selection-counter">{selectedCount} of 3 plans selected</div>
+                </div>
+                <p slot="footer" class="dd-card-footer-hint">
+                    Select 1 to 3 plans, then click "Compare &amp; Configure" to proceed.
+                </p>
+
+                <div class="dd-step-body">
+                    <template lwc:if={hasEligibleProducts}>
+                        <template for:each={groupedProducts} for:item="group">
+                            <div key={group.family} class="dd-plan-family-group">
+                                <h3 class="dd-plan-family-heading">
+                                    <lightning-badge label={group.family} class="dd-badge-blue"></lightning-badge>
+                                    <span class="dd-plan-family-count">{group.plans.length} plan(s)</span>
+                                </h3>
+                                <div class="dd-plan-cards-row">
+                                    <template for:each={group.plans} for:item="ep">
+                                        <div key={ep.product.Id} class={ep.cardClass}>
+                                            <div class="dd-plan-card__header">
+                                                <div class="dd-plan-checkbox-header">
+                                                    <lightning-input
+                                                        type="checkbox"
+                                                        variant="label-hidden"
+                                                        label="Select plan"
+                                                        checked={ep.isSelected}
+                                                        disabled={ep.isDisabled}
+                                                        data-product-id={ep.product.Id}
+                                                        data-sm-id={ep.sellingModel.Id}
+                                                        onchange={handleTogglePlan}>
+                                                    </lightning-input>
+                                                </div>
+                                                <h4 class="dd-plan-card__name">{ep.product.Product_Name__c}</h4>
+                                                <lightning-badge label={ep.product.Network_Fee_Basis__c} class="dd-badge-teal"></lightning-badge>
+                                            </div>
+                                            <div class="dd-plan-card__body">
+                                                <div class="dd-plan-stat">
+                                                    <span class="dd-plan-stat__label">Annual Max Options</span>
+                                                    <span class="dd-plan-stat__value">{ep.sellingModel.Available_Annual_Maxes__c}</span>
+                                                </div>
+                                                <div class="dd-plan-stat">
+                                                    <span class="dd-plan-stat__label">Deductible (Ind / Fam)</span>
+                                                    <span class="dd-plan-stat__value">
+                                                        ${ep.product.Deductible_Individual__c} / ${ep.product.Deductible_Family__c}
+                                                    </span>
+                                                </div>
+                                                <div class="dd-plan-stat">
+                                                    <span class="dd-plan-stat__label">Min Employer Contribution</span>
+                                                    <span class="dd-plan-stat__value">{ep.sellingModel.Min_Contribution_Pct__c}%</span>
+                                                </div>
+                                                <div class="dd-plan-stat__badges">
+                                                    <template lwc:if={ep.product.Ortho_Available__c}>
+                                                        <lightning-badge label="Ortho Available" class="dd-badge-green"></lightning-badge>
+                                                    </template>
+                                                    <template lwc:if={ep.product.DnP_Max_Waiver_Available__c}>
+                                                        <lightning-badge label="D&amp;P Waiver" class="dd-badge-green"></lightning-badge>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+
+                        <!-- Compare & Configure CTA -->
+                        <div class="dd-plan-selection-cta">
+                            <div class="dd-btn-green">
+                                <lightning-button
+                                    label="Compare &amp; Configure &#x2192;"
+                                    variant="brand"
+                                    onclick={handleProceedToCompare}
+                                    disabled={isProceedDisabled}>
+                                </lightning-button>
+                            </div>
+                        </div>
+                    </template>
+
+                    <template lwc:else>
+                        <div class="dd-empty-state">
+                            <lightning-icon icon-name="utility:search" size="large" class="dd-empty-state__icon"></lightning-icon>
+                            <p>No eligible plans found for this group size and segment.</p>
+                            <p class="dd-empty-state__sub">Verify group size &#x2265; 2 and segment is set on the account.</p>
+                        </div>
+                    </template>
+                </div>
+            </lightning-card>
+        </template>
+
+        <!-- ══════════════════════════════════════════════════ -->
+        <!-- STEP 3 — COMPARE PLANS                            -->
+        <!-- ══════════════════════════════════════════════════ -->
+        <template lwc:if={isStep3}>
+            <lightning-card class="dd-step-card">
+                <div slot="title" class="dd-card-title">
+                    <lightning-icon icon-name="utility:side_by_side" size="small"></lightning-icon>
+                    <span>Compare Plans</span>
+                </div>
+
+                <div class="dd-step-body">
+                    <div class="dd-compare-grid">
+                        <template for:each={selectedPlans} for:item="sp">
+                            <div key={sp.productId} class="dd-compare-col">
+                                <div class="dd-compare-col__header">
+                                    <span>{sp.product.Product_Name__c}</span>
+                                    <lightning-badge label={sp.product.Network_Fee_Basis__c} class="dd-badge-teal"></lightning-badge>
+                                </div>
+                                <div class="dd-compare-rows">
+                                    <div class="dd-compare-row">
+                                        <span class="dd-compare-row__label">Annual Max Options</span>
+                                        <span class="dd-compare-row__value">{sp.sellingModel.Available_Annual_Maxes__c}</span>
+                                    </div>
+                                    <div class="dd-compare-row">
+                                        <span class="dd-compare-row__label">Deductible (Ind)</span>
+                                        <span class="dd-compare-row__value">${sp.product.Deductible_Individual__c}</span>
+                                    </div>
+                                    <div class="dd-compare-row">
+                                        <span class="dd-compare-row__label">Deductible (Fam)</span>
+                                        <span class="dd-compare-row__value">${sp.product.Deductible_Family__c}</span>
+                                    </div>
+                                    <div class="dd-compare-row">
+                                        <span class="dd-compare-row__label">Min Contribution</span>
+                                        <span class="dd-compare-row__value">{sp.sellingModel.Min_Contribution_Pct__c}%</span>
+                                    </div>
+                                    <div class="dd-compare-row">
+                                        <span class="dd-compare-row__label">Orthodontia</span>
+                                        <span class="dd-compare-row__value">
+                                            <template lwc:if={sp.product.Ortho_Available__c}>
+                                                <lightning-badge label="Available" class="dd-badge-green"></lightning-badge>
+                                            </template>
+                                            <template lwc:else>
+                                                <span>Not available</span>
+                                            </template>
+                                        </span>
+                                    </div>
+                                    <div class="dd-compare-row">
+                                        <span class="dd-compare-row__label">D&amp;P Waiver</span>
+                                        <span class="dd-compare-row__value">
+                                            <template lwc:if={sp.product.DnP_Max_Waiver_Available__c}>
+                                                <lightning-badge label="Available" class="dd-badge-teal"></lightning-badge>
+                                            </template>
+                                            <template lwc:else>
+                                                <span>Not available</span>
+                                            </template>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <div class="dd-compare-cta">
+                        <div class="dd-btn-green">
+                            <lightning-button
+                                label="Proceed to Configure &#x2192;"
+                                variant="brand"
+                                onclick={handleProceedToConfigure}>
+                            </lightning-button>
+                        </div>
+                    </div>
+                </div>
+            </lightning-card>
+        </template>
+
+        <!-- ══════════════════════════════════════════════════ -->
+        <!-- STEP 4 — CONFIGURE PLANS                          -->
+        <!-- ══════════════════════════════════════════════════ -->
+        <template lwc:if={isStep4}>
+            <lightning-card class="dd-step-card">
+                <div slot="title" class="dd-card-title">
+                    <lightning-icon icon-name="utility:settings" size="small"></lightning-icon>
+                    <span>Configure Plans</span>
+                </div>
+
+                <div class="dd-step-body dd-config-tabs-wrapper">
+                    <lightning-tabset>
+                        <template for:each={planConfigs} for:item="pc">
+                            <lightning-tab key={pc.configId} label={pc.productName}>
+                                <div class="dd-config-form">
+
+                                    <!-- Plan Design -->
+                                    <div class="dd-form-section">
+                                        <h4 class="dd-form-section__title">Plan Design</h4>
+                                        <div class="dd-form-row">
+                                            <lightning-combobox
+                                                label="Annual Maximum"
+                                                value={pc._annualMax}
+                                                options={pc.annualMaxOptions}
+                                                placeholder="Select annual max…"
+                                                data-product-id={pc.productId}
+                                                data-field="_annualMax"
+                                                onchange={handleConfigChange}
+                                                required>
+                                            </lightning-combobox>
+                                        </div>
+                                        <div class="dd-form-row">
+                                            <lightning-input
+                                                type="number"
+                                                label="Custom Deductible — Individual"
+                                                value={pc._customDeductibleInd}
+                                                min="0"
+                                                step="25"
+                                                placeholder="e.g. 25, 50, 75, 100, 150 — blank = plan default ($50)"
+                                                field-level-help="Override the plan's individual annual deductible. Valid values: $0, $25, $50, $75, $100, $150, $200 (multiples of $25). Leave blank to keep the plan default."
+                                                data-product-id={pc.productId}
+                                                data-field="_customDeductibleInd"
+                                                onchange={handleConfigChange}>
+                                            </lightning-input>
+                                        </div>
+                                        <div class="dd-form-row">
+                                            <lightning-input
+                                                type="number"
+                                                label="Custom Deductible — Family"
+                                                value={pc._customDeductibleFam}
+                                                min="0"
+                                                step="25"
+                                                placeholder="e.g. 75, 150, 200, 300 — blank = plan default ($150)"
+                                                field-level-help="Override the plan's family annual deductible. Valid values: $75, $150, $200, $300, $450 (multiples of $25). Leave blank to keep the plan default."
+                                                data-product-id={pc.productId}
+                                                data-field="_customDeductibleFam"
+                                                onchange={handleConfigChange}>
+                                            </lightning-input>
+                                        </div>
+                                    </div>
+
+                                    <!-- Employer Contribution -->
+                                    <div class="dd-form-section">
+                                        <h4 class="dd-form-section__title">Employer Contribution</h4>
+                                        <div class="dd-form-row dd-contribution-row">
+                                            <lightning-input
+                                                type="number"
+                                                label="Contribution Percentage"
+                                                value={pc._contributionPct}
+                                                min={pc.minContributionPct}
+                                                max="100"
+                                                step="5"
+                                                data-product-id={pc.productId}
+                                                data-field="_contributionPct"
+                                                onchange={handleConfigChange}>
+                                            </lightning-input>
+                                            <div class="dd-contribution-suffix">%</div>
+                                        </div>
+                                        <p class="dd-form-hint">
+                                            Minimum for this plan: <strong>{pc.minContributionPct}%</strong>
+                                        </p>
+                                    </div>
+
+                                    <!-- Waivers -->
+                                    <div class="dd-form-section">
+                                        <h4 class="dd-form-section__title">Waivers</h4>
+                                        <div class="dd-form-row">
+                                            <lightning-input
+                                                type="toggle"
+                                                label="D&amp;P Maximum Waiver"
+                                                checked={pc._dnpWaiver}
+                                                message-toggle-active="Waived"
+                                                message-toggle-inactive="Not Waived"
+                                                data-product-id={pc.productId}
+                                                data-field="_dnpWaiver"
+                                                onchange={handleConfigChange}>
+                                            </lightning-input>
+                                        </div>
+                                        <div class="dd-form-row">
+                                            <lightning-input
+                                                type="toggle"
+                                                label="Waiting Period Waiver"
+                                                checked={pc._waitingPeriodWaived}
+                                                message-toggle-active="Waived"
+                                                message-toggle-inactive="Not Waived"
+                                                data-product-id={pc.productId}
+                                                data-field="_waitingPeriodWaived"
+                                                onchange={handleConfigChange}>
+                                            </lightning-input>
+                                        </div>
+                                    </div>
+
+                                    <!-- Orthodontia (conditional) -->
+                                    <template lwc:if={pc.orthoAvailable}>
+                                        <div class="dd-form-section">
+                                            <h4 class="dd-form-section__title">Orthodontia</h4>
+                                            <div class="dd-form-row">
+                                                <lightning-input
+                                                    type="toggle"
+                                                    label="Include Orthodontia"
+                                                    checked={pc._orthoEnabled}
+                                                    message-toggle-active="Included"
+                                                    message-toggle-inactive="Not Included"
+                                                    data-product-id={pc.productId}
+                                                    onchange={handleOrthoToggle}>
+                                                </lightning-input>
+                                            </div>
+                                            <template lwc:if={pc._orthoEnabled}>
+                                                <div class="dd-form-row dd-form-row--indent">
+                                                    <lightning-combobox
+                                                        label="Coverage Type"
+                                                        value={pc._orthoType}
+                                                        options={pc.orthoTypeOptions}
+                                                        placeholder="Select ortho type…"
+                                                        data-product-id={pc.productId}
+                                                        data-field="_orthoType"
+                                                        onchange={handleConfigChange}>
+                                                    </lightning-combobox>
+                                                </div>
+                                                <div class="dd-form-row dd-form-row--indent">
+                                                    <lightning-combobox
+                                                        label="Lifetime Maximum"
+                                                        value={pc._orthoMax}
+                                                        options={pc.orthoMaxOptions}
+                                                        placeholder="Select ortho max…"
+                                                        data-product-id={pc.productId}
+                                                        data-field="_orthoMax"
+                                                        onchange={handleConfigChange}>
+                                                    </lightning-combobox>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </template>
+
+                                    <!-- View All Benefits toggle -->
+                                    <div class="dd-form-section">
+                                        <lightning-button
+                                            label="View All Benefits"
+                                            icon-name="utility:chevrondown"
+                                            data-product-id={pc.productId}
+                                            onclick={handleToggleBenefits}>
+                                        </lightning-button>
+                                    </div>
+
+                                    <!-- Benefits Panel (shown when isBenefitsOpen) -->
+                                    <template lwc:if={pc.isBenefitsOpen}>
+                                        <div class="dd-benefits-panel">
+                                            <div class="dd-benefits-panel__header">
+                                                <lightning-icon icon-name="utility:list" size="x-small" class="dd-benefits-panel__icon"></lightning-icon>
+                                                <span>Coverage &amp; Benefits — {pc.productName}</span>
+                                            </div>
+                                            <div class="dd-benefits-panel__body">
+                                                <template lwc:if={pc.benefitsData}>
+                                                    <lightning-accordion allow-multiple-sections-open>
+                                                        <template for:each={pc.benefitsData.coverageSpecs} for:item="cs">
+                                                            <lightning-accordion-section key={cs.coverageName} name={cs.coverageName} label={cs.coverageName}>
+                                                                <div class="dd-benefits-coverage-meta">
+                                                                    <span>PPO: <strong>{cs.coinsurancePPO}%</strong></span>
+                                                                    <span class="dd-benefits-sep">|</span>
+                                                                    <span>Non-PPO: <strong>{cs.coinsuranceNonPPO}%</strong></span>
+                                                                    <template lwc:if={cs.deductibleApplies}>
+                                                                        <span class="dd-benefits-sep">|</span>
+                                                                        <lightning-badge label="Deductible Applies" class="dd-badge-blue"></lightning-badge>
+                                                                    </template>
+                                                                </div>
+                                                                <div class="dd-benefits-table-wrapper">
+                                                                    <table class="dd-benefits-table">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>CDT Code</th>
+                                                                                <th>Description</th>
+                                                                                <th>Frequency</th>
+                                                                                <th>Age Limits</th>
+                                                                                <th>Notes</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <template for:each={cs.benefits} for:item="ben">
+                                                                                <tr key={ben.cdtCode}>
+                                                                                    <td><strong>{ben.cdtCode}</strong></td>
+                                                                                    <td>{ben.cdtDescription}</td>
+                                                                                    <td>{ben.frequencyLimit} / {ben.frequencyPeriod}</td>
+                                                                                    <td>{ben.ageMin} – {ben.ageMax}</td>
+                                                                                    <td>{ben.notes}</td>
+                                                                                </tr>
+                                                                            </template>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </lightning-accordion-section>
+                                                        </template>
+                                                    </lightning-accordion>
+                                                </template>
+                                                <template lwc:else>
+                                                    <div class="dd-loading-overlay">
+                                                        <lightning-spinner alternative-text="Loading benefits" size="small"></lightning-spinner>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </template>
+
+                                </div>
+                            </lightning-tab>
+                        </template>
+                    </lightning-tabset>
+                </div>
+            </lightning-card>
+        </template>
+
+        <!-- ══════════════════════════════════════════════════ -->
+        <!-- STEP 5 — RATE PREVIEW                             -->
+        <!-- ══════════════════════════════════════════════════ -->
+        <template lwc:if={isStep5}>
+            <lightning-card class="dd-step-card">
+                <div slot="title" class="dd-card-title">
+                    <lightning-icon icon-name="utility:moneybag" size="small"></lightning-icon>
+                    <span>Rate Preview</span>
+                </div>
+
+                <div class="dd-step-body">
+                    <template lwc:if={hasRateResults}>
+                        <div class="dd-rate-cards-row">
+                            <template for:each={rateResults} for:item="result">
+                                <div key={result.configId} class="dd-rate-card">
+
+                                    <!-- Plan header / hero -->
+                                    <div class="dd-rate-hero">
+                                        <div class="dd-rate-hero__plan">{result.productName}</div>
+                                        <div class="dd-rate-hero__premium">
+                                            <span class="dd-rate-hero__label">Total Monthly Premium</span>
+                                            <span class="dd-rate-hero__amount">{result.totalMonthlyPremiumFormatted}</span>
+                                        </div>
+                                        <div class="dd-rate-hero__meta">
+                                            <span>{result.totalEnrolledCount} enrolled members</span>
+                                            <span class="dd-rate-hero__sep">&#xB7;</span>
+                                            <span>Rate Level: {result.rateLevel}</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Tier Breakdown -->
+                                    <div class="dd-table-wrapper">
+                                        <table class="dd-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Tier</th>
+                                                    <th>Enrolled</th>
+                                                    <th>Rate / Member</th>
+                                                    <th>Monthly</th>
+                                                    <th>Employer</th>
+                                                    <th>Employee</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <template for:each={result.tierRates} for:item="tier">
+                                                    <tr key={tier.tier}>
+                                                        <td><span class="dd-tier-chip">{tier.tier}</span></td>
+                                                        <td>{tier.enrolledCount}</td>
+                                                        <td>{tier.monthlyRateFormatted}</td>
+                                                        <td><strong>{tier.monthlyPremiumFormatted}</strong></td>
+                                                        <td class="dd-td-employer">{tier.employerShareFormatted}</td>
+                                                        <td class="dd-td-employee">{tier.employeeShareFormatted}</td>
+                                                    </tr>
+                                                </template>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="dd-table__total-row">
+                                                    <td colspan="3"><strong>TOTAL</strong></td>
+                                                    <td><strong>{result.totalMonthlyPremiumFormatted}</strong></td>
+                                                    <td class="dd-td-employer"><strong>{result.employerShareFormatted}</strong></td>
+                                                    <td class="dd-td-employee"><strong>{result.employeeShareFormatted}</strong></td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+
+                                    <!-- Employer/Employee Split Bar -->
+                                    <div class="dd-split-section">
+                                        <div class="dd-split-bar">
+                                            <div class="dd-split-bar__employer" style={result.employerBarStyle}></div>
+                                            <div class="dd-split-bar__employee" style={result.employeeBarStyle}></div>
+                                        </div>
+                                        <div class="dd-split-legend">
+                                            <span>
+                                                <span class="dd-split-legend__dot dd-split-legend__dot--employer"></span>
+                                                Employer {result.employerPctFormatted} ({result.employerShareFormatted}/mo)
+                                            </span>
+                                            <span>
+                                                <span class="dd-split-legend__dot dd-split-legend__dot--employee"></span>
+                                                Employee {result.employeePctFormatted} ({result.employeeShareFormatted}/mo)
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                    <template lwc:else>
+                        <div class="dd-empty-state">
+                            <lightning-icon icon-name="utility:moneybag" size="large" class="dd-empty-state__icon"></lightning-icon>
+                            <p>Rates not yet calculated.</p>
+                            <div class="dd-btn-green dd-empty-state__action">
+                                <lightning-button
+                                    label="Calculate Rates"
+                                    variant="brand"
+                                    onclick={handleCalculateRates}>
+                                </lightning-button>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </lightning-card>
+        </template>
+
+        <!-- ══════════════════════════════════════════════════ -->
+        <!-- STEP 6 — PROPOSAL                                 -->
+        <!-- ══════════════════════════════════════════════════ -->
+        <template lwc:if={isStep6}>
+            <lightning-card class="dd-step-card">
+                <div slot="title" class="dd-card-title">
+                    <lightning-icon icon-name="utility:check" size="small"></lightning-icon>
+                    <span>Proposal</span>
+                </div>
+
+                <div class="dd-step-body">
+
+                    <!-- Success confirmation (shown after Create Proposal) -->
+                    <template lwc:if={proposalCreated}>
+                        <div class="dd-success-box">
+                            <lightning-icon icon-name="utility:success" size="medium" class="dd-success-box__icon"></lightning-icon>
+                            <div class="dd-success-box__body">
+                                <h3 class="dd-success-box__title">Proposal Created Successfully!</h3>
+                                <p class="dd-success-box__sub">
+                                    Quote <strong>{quoteId}</strong> has been submitted for
+                                    <strong>{groupInfo.accountName}</strong>.
+                                    The quote is now in <em>Presented</em> status.
+                                </p>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Summary Grid -->
+                    <div class="dd-proposal-grid">
+
+                        <!-- Group Info Section -->
+                        <div class="dd-summary-section">
+                            <h4 class="dd-summary-section__title">
+                                <lightning-icon icon-name="standard:account" size="x-small"></lightning-icon>
+                                Group Information
+                            </h4>
+                            <dl class="dd-summary-list">
+                                <div class="dd-summary-item">
+                                    <dt>Account</dt><dd>{groupInfo.accountName}</dd>
+                                </div>
+                                <div class="dd-summary-item">
+                                    <dt>Group Number</dt><dd>{groupInfo.groupNumber}</dd>
+                                </div>
+                                <div class="dd-summary-item">
+                                    <dt>SIC Code</dt><dd>{groupInfo.sicCode}</dd>
+                                </div>
+                                <div class="dd-summary-item">
+                                    <dt>Total Enrolled</dt><dd>{censusData.totalEnrolled} members</dd>
+                                </div>
+                                <div class="dd-summary-item">
+                                    <dt>Rate Level</dt>
+                                    <dd><lightning-badge label={sicRateLevel} class="dd-badge-teal"></lightning-badge></dd>
+                                </div>
+                            </dl>
+                        </div>
+
+                        <!-- Per-Plan Summary Cards -->
+                        <template for:each={planConfigs} for:item="pc">
+                            <div key={pc.configId} class="dd-proposal-plan-card">
+                                <h4 class="dd-summary-section__title">
+                                    <lightning-icon icon-name="standard:product" size="x-small"></lightning-icon>
+                                    {pc.productName}
+                                    <lightning-badge label={pc.networkName} class="dd-badge-teal"></lightning-badge>
+                                </h4>
+                                <dl class="dd-summary-list">
+                                    <div class="dd-summary-item">
+                                        <dt>Annual Max</dt><dd>${pc._annualMax}</dd>
+                                    </div>
+                                    <div class="dd-summary-item">
+                                        <dt>Employer Contribution</dt><dd>{pc._contributionPct}%</dd>
+                                    </div>
+                                    <div class="dd-summary-item">
+                                        <dt>Orthodontia</dt>
+                                        <dd>
+                                            <template lwc:if={pc._orthoEnabled}>
+                                                {pc._orthoType} — ${pc._orthoMax}
+                                            </template>
+                                            <template lwc:else>
+                                                Not Included
+                                            </template>
+                                        </dd>
+                                    </div>
+                                    <div class="dd-summary-item">
+                                        <dt>D&amp;P Waiver</dt>
+                                        <dd>
+                                            <template lwc:if={pc._dnpWaiver}>Waived</template>
+                                            <template lwc:else>Not Waived</template>
+                                        </dd>
+                                    </div>
+                                    <div class="dd-summary-item">
+                                        <dt>Waiting Period</dt>
+                                        <dd>
+                                            <template lwc:if={pc._waitingPeriodWaived}>Waived</template>
+                                            <template lwc:else>Standard</template>
+                                        </dd>
+                                    </div>
+                                </dl>
+                            </div>
+                        </template>
+
+                        <!-- Premium Summary (full-width) -->
+                        <template lwc:if={hasRateResults}>
+                            <div class="dd-summary-section dd-summary-section--full">
+                                <h4 class="dd-summary-section__title">
+                                    <lightning-icon icon-name="utility:moneybag" size="x-small"></lightning-icon>
+                                    Premium Summary
+                                </h4>
+                                <div class="dd-rate-cards-row">
+                                    <template for:each={rateResults} for:item="result">
+                                        <div key={result.configId} class="dd-premium-highlight">
+                                            <div class="dd-premium-highlight__plan">{result.productName}</div>
+                                            <div class="dd-premium-highlight__amount">{result.totalMonthlyPremiumFormatted}</div>
+                                            <div class="dd-premium-highlight__sub">per month total</div>
+                                            <div class="dd-premium-highlight__split">
+                                                <span class="dd-premium-highlight__employer">
+                                                    Employer: {result.employerShareFormatted}
+                                                </span>
+                                                <span class="dd-premium-highlight__sep">&#xB7;</span>
+                                                <span class="dd-premium-highlight__employee">
+                                                    Employee: {result.employeeShareFormatted}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+
+                    </div>
+
+                    <!-- Create Proposal Button -->
+                    <template lwc:if={proposalNotCreated}>
+                        <div class="dd-submit-row">
+                            <div class="dd-btn-green">
+                                <lightning-button
+                                    label="Create Proposal"
+                                    variant="brand"
+                                    onclick={handleCreateProposal}
+                                    disabled={isLoading}>
+                                </lightning-button>
+                            </div>
+                            <p class="dd-submit-hint">
+                                Submitting will move the quote to Presented status and generate a proposal for the employer.
+                            </p>
+                        </div>
+                    </template>
+
+                </div>
+            </lightning-card>
+        </template>
+
+        <!-- ── NAVIGATION BUTTONS ──────────────────────────── -->
+        <div class="dd-wizard-nav">
+            <template lwc:if={showBackButton}>
+                <lightning-button
+                    label="&#x2190; Back"
+                    onclick={handleBack}
+                    class="dd-nav-back">
+                </lightning-button>
+            </template>
+            <div class="dd-wizard-nav__spacer"></div>
+            <template lwc:if={showNextButton}>
+                <div class="dd-btn-green">
+                    <lightning-button
+                        label={nextButtonLabel}
+                        variant="brand"
+                        onclick={handleNext}
+                        disabled={isNextDisabled}>
+                    </lightning-button>
+                </div>
+            </template>
+        </div>
+
+    </div>
+</template>

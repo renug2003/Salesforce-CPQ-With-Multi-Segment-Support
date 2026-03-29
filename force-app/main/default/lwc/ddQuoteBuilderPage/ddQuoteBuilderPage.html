@@ -1,0 +1,10 @@
+<template>
+    <template lwc:if={recordId}>
+        <c-dd-quote-builder record-id={recordId}></c-dd-quote-builder>
+    </template>
+    <template lwc:else>
+        <div class="slds-align_absolute-center slds-p-around_xxxx-large">
+            <lightning-spinner alternative-text="Loading quote builder..." size="large"></lightning-spinner>
+        </div>
+    </template>
+</template>

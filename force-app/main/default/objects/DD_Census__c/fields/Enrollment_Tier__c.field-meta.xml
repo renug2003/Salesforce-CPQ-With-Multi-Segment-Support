@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Enrollment_Tier__c</fullName>
+    <label>Enrollment Tier</label>
+    <type>Picklist</type>
+    <required>true</required><valueSet><restricted>true</restricted><valueSetDefinition><sorted>false</sorted><value><fullName>EE</fullName><default>false</default><label>EE</label></value><value><fullName>ES</fullName><default>false</default><label>ES</label></value><value><fullName>EC</fullName><default>false</default><label>EC</label></value><value><fullName>EF</fullName><default>false</default><label>EF</label></value></valueSetDefinition></valueSet>
+    <description>Coverage tier</description>
+</CustomField>

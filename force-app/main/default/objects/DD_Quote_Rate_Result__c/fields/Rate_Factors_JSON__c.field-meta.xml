@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Rate_Factors_JSON__c</fullName>
+    <label>Rate Factors</label>
+    <type>LongTextArea</type>
+    <length>5000</length><visibleLines>4</visibleLines>
+    <description>Full factor breakdown for audit trail</description>
+</CustomField>

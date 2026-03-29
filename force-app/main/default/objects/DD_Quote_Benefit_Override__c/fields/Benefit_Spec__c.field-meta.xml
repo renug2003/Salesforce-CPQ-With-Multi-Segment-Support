@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Benefit_Spec__c</fullName>
+    <label>Benefit Spec</label>
+    <type>Lookup</type>
+    <referenceTo>DD_Benefit_Spec__c</referenceTo><relationshipLabel>Quote Overrides</relationshipLabel><relationshipName>Quote_Overrides</relationshipName><required>true</required>
+    <description>Master CDT benefit spec</description>
+    <deleteConstraint>Restrict</deleteConstraint>
+</CustomField>

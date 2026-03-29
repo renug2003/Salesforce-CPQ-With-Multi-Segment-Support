@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Status__c</fullName>
+    <label>Status</label>
+    <type>Picklist</type>
+    <required>true</required><valueSet><restricted>true</restricted><valueSetDefinition><sorted>false</sorted><value><fullName>Generated</fullName><default>false</default><label>Generated</label></value><value><fullName>Sent</fullName><default>false</default><label>Sent</label></value><value><fullName>Paid</fullName><default>false</default><label>Paid</label></value><value><fullName>Past Due</fullName><default>false</default><label>Past Due</label></value></valueSetDefinition></valueSet>
+    <description>Billing status</description>
+</CustomField>

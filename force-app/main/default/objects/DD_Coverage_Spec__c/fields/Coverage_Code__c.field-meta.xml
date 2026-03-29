@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Coverage_Code__c</fullName>
+    <label>Coverage Code</label>
+    <type>Text</type>
+    <length>10</length><required>true</required><unique>false</unique><externalId>false</externalId>
+    <description>DNP, BAS, EPO, MAJ, ORT</description>
+</CustomField>

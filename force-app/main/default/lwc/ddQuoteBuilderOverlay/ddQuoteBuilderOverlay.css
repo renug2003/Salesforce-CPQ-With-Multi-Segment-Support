@@ -1,0 +1,16 @@
+:host {
+    display: block;
+}
+
+/*
+ * In quote mode: fills the main content column of the record page.
+ * min-height pushes Sales Path / tabset below the visible viewport
+ * so the Quote Builder appears to "own" the main area.
+ * The left record-details panel is unaffected — it lives in a separate
+ * FlexiPage region (leftsidebar) that we never touch.
+ */
+.dd-qb-content {
+    background: #ffffff;
+    min-height: calc(100vh - 80px);
+    overflow: auto;
+}

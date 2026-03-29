@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Quote_Plan_Config__c</fullName>
+    <label>Quote Plan Config</label>
+    <type>MasterDetail</type>
+    <referenceTo>DD_Quote_Plan_Config__c</referenceTo><relationshipLabel>Rate Results</relationshipLabel><relationshipName>Rate_Results</relationshipName><relationshipOrder>0</relationshipOrder><reparentableMasterDetail>false</reparentableMasterDetail><writeRequiresMasterRead>false</writeRequiresMasterRead>
+    <description>Parent config</description>
+</CustomField>

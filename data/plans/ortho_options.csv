@@ -1,0 +1,19 @@
+Product_Name,Ortho_Type__c,Ortho_Coinsurance__c,Lifetime_Max__c,Min_Enrolled_Required__c
+Deluxe 100,Child Only,50,1500,5
+Deluxe 100,Child and Adult,50,1500,5
+Deluxe 200,Child Only,50,1500,5
+Deluxe 200,Child and Adult,50,1500,5
+Deluxe 300,Child Only,50,1500,5
+Deluxe 300,Child and Adult,50,1500,5
+Advantage 100,Child Only,50,1000,5
+Advantage 100,Child Only,50,1500,5
+Advantage 200,Child Only,50,1000,5
+Advantage 200,Child Only,50,1500,5
+Advantage 200,Child and Adult,50,1000,5
+Advantage 200,Child and Adult,50,1500,5
+Advantage 300,Child Only,50,1000,5
+Advantage 300,Child Only,50,1500,5
+Advantage 400,Child Only,50,1000,5
+Advantage 400,Child Only,50,1500,5
+Advantage 400,Child and Adult,50,1000,5
+Advantage 400,Child and Adult,50,1500,5

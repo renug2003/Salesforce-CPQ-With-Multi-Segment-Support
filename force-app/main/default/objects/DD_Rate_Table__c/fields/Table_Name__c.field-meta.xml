@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Table_Name__c</fullName>
+    <label>Table Name</label>
+    <type>Text</type>
+    <length>100</length><required>true</required><unique>false</unique><externalId>false</externalId>
+    <description>Descriptive name e.g. CA SB PPO 2025 Level 1</description>
+</CustomField>

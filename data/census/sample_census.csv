@@ -1,0 +1,26 @@
+Employee_Name__c,DOB__c,Gender__c,Zip_Code__c,Hire_Date__c,Enrollment_Tier__c,Status__c
+John Smith,1985-03-15,M,90210,2020-01-15,EF,Active
+Sarah Johnson,1990-07-22,F,90211,2019-06-01,ES,Active
+Mike Chen,1978-11-30,M,90212,2021-03-10,EE,Active
+Lisa Park,1995-02-14,F,90210,2022-08-20,EC,Active
+David Rodriguez,1982-09-05,M,90213,2018-11-15,EF,Active
+Emily Taylor,1988-06-18,F,90211,2020-04-01,EE,Active
+James Wilson,1975-12-25,M,90214,2017-07-22,ES,Active
+Maria Garcia,1992-04-10,F,90210,2023-01-05,EE,Active
+Robert Kim,1980-08-07,M,90215,2019-09-15,EF,Active
+Jennifer Lee,1993-01-28,F,90212,2021-06-30,EC,Active
+Thomas Brown,1987-05-16,M,90210,2020-02-14,ES,Active
+Amanda Davis,1991-10-03,F,90213,2022-03-01,EE,Active
+Christopher Martinez,1976-07-19,M,90211,2016-12-01,EF,Active
+Nicole Anderson,1994-03-22,F,90214,2023-05-15,EE,Active
+Daniel Thompson,1983-11-11,M,90210,2019-01-07,EC,Active
+Rachel White,1989-08-29,F,90212,2021-09-01,ES,Active
+Steven Harris,1977-02-06,M,90215,2018-04-15,EF,Active
+Laura Clark,1996-06-14,F,90210,2024-01-10,EE,Active
+Kevin Lewis,1984-09-20,M,90211,2020-07-01,ES,Active
+Michelle Robinson,1990-12-08,F,90213,2022-11-15,EE,Active
+Brian Walker,1981-04-25,M,90210,2019-03-20,EF,Active
+Stephanie Hall,1993-07-17,F,90214,2023-02-01,EC,Active
+Andrew Allen,1986-01-09,M,90212,2021-01-15,EE,Active
+Jessica Young,1992-05-31,F,90215,2022-06-01,ES,Active
+Mark King,1979-10-14,M,90210,2017-10-01,EF,Active

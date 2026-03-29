@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Group_Size__c</fullName>
+    <label>Group Size</label>
+    <type>Number</type>
+    <precision>6</precision>
+    <scale>0</scale>
+    <required>false</required>
+    <unique>false</unique>
+    <externalId>false</externalId>
+    <description>Total eligible employee count for this employer group. Used to determine segment eligibility and enforce minimum group size rules.</description>
+</CustomField>

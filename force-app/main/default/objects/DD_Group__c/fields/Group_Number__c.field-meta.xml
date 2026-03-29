@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Group_Number__c</fullName>
+    <label>Group Number</label>
+    <type>AutoNumber</type>
+    <startingNumber>1000</startingNumber>
+    <displayFormat>GRP-{0000}</displayFormat>
+    <externalId>true</externalId>
+</CustomField>

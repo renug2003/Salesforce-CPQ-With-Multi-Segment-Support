@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Picklist_Values__c</fullName>
+    <label>Picklist Values</label>
+    <type>LongTextArea</type>
+    <length>5000</length><visibleLines>4</visibleLines>
+    <description>JSON array of allowed values when Data_Type is Picklist</description>
+</CustomField>

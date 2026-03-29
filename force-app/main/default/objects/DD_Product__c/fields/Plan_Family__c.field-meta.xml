@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Plan_Family__c</fullName>
+    <label>Plan Family</label>
+    <type>Picklist</type>
+    <required>true</required><valueSet><restricted>true</restricted><valueSetDefinition><sorted>false</sorted><value><fullName>PPO Deluxe</fullName><default>false</default><label>PPO Deluxe</label></value><value><fullName>PPO Advantage</fullName><default>false</default><label>PPO Advantage</label></value><value><fullName>PPO Core</fullName><default>false</default><label>PPO Core</label></value><value><fullName>DeltaCare USA</fullName><default>false</default><label>DeltaCare USA</label></value><value><fullName>Pediatric</fullName><default>false</default><label>Pediatric</label></value><value><fullName>Core Buy-Up</fullName><default>false</default><label>Core Buy-Up</label></value><value><fullName>Dual Choice</fullName><default>false</default><label>Dual Choice</label></value></valueSetDefinition></valueSet>
+    <description>Plan family grouping</description>
+</CustomField>

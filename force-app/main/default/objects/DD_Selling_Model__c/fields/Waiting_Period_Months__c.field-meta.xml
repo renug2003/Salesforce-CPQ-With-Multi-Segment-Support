@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Waiting_Period_Months__c</fullName>
+    <label>Waiting Period Months</label>
+    <type>Number</type>
+    <precision>4</precision><scale>0</scale><required>false</required><unique>false</unique><externalId>false</externalId>
+    <description>Months of waiting period (12 for voluntary, 0 employer-paid)</description>
+</CustomField>

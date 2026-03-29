@@ -1,0 +1,57 @@
+<template>
+    <div class="panel-root">
+
+        <!-- ── Error banner ──────────────────────────────────────────────── -->
+        <template lwc:if={hasError}>
+            <div class="panel-error" role="alert">
+                <lightning-icon icon-name="utility:error" size="x-small"></lightning-icon>
+                <span>{errorMessage}</span>
+                <button onclick={handleDismissError} class="err-close">✕</button>
+            </div>
+        </template>
+
+        <!-- ── Creating spinner ──────────────────────────────────────────── -->
+        <template lwc:if={isCreating}>
+            <div class="panel-creating">
+                <lightning-spinner size="medium" variant="brand" alternative-text="Creating quote..."></lightning-spinner>
+                <p class="creating-msg">Setting up your quote&hellip;</p>
+            </div>
+        </template>
+
+        <!-- ── Hero / launch button (idle state) ─────────────────────────── -->
+        <template lwc:if={showHero}>
+            <div class="panel-hero">
+                <div class="hero-content">
+                    <div class="hero-icon-wrap">
+                        <lightning-icon icon-name="standard:product" size="large" class="hero-icon"></lightning-icon>
+                    </div>
+                    <div class="hero-text">
+                        <h2 class="hero-title">Digital Insurance Quote</h2>
+                        <p class="hero-desc">
+                            Configure dental plan options, enter census data, calculate rates,
+                            and generate proposal PDFs — all in one guided workflow.
+                        </p>
+                    </div>
+                    <lightning-button
+                        label="New Quote"
+                        variant="brand"
+                        icon-name="utility:add"
+                        onclick={handleStartQuote}
+                        class="hero-btn">
+                    </lightning-button>
+                </div>
+            </div>
+        </template>
+
+        <!-- ── Inline wizard ─────────────────────────────────────────────── -->
+        <template lwc:if={showWizard}>
+            <div class="panel-wizard">
+                <c-dd-account-quote-creator
+                    record-id={oppId}
+                    onclose={handleWizardClose}>
+                </c-dd-account-quote-creator>
+            </div>
+        </template>
+
+    </div>
+</template>

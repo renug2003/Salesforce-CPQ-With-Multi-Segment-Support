@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Rate_Table__c</fullName>
+    <label>Rate Table</label>
+    <type>MasterDetail</type>
+    <referenceTo>DD_Rate_Table__c</referenceTo><relationshipLabel>Rate Entries</relationshipLabel><relationshipName>Rate_Entries</relationshipName><relationshipOrder>0</relationshipOrder><reparentableMasterDetail>false</reparentableMasterDetail><writeRequiresMasterRead>false</writeRequiresMasterRead>
+    <description>Parent rate table</description>
+</CustomField>

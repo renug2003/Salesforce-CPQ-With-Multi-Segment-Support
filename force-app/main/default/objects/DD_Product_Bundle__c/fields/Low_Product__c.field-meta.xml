@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Low_Product__c</fullName>
+    <label>Low Plan</label>
+    <type>Lookup</type>
+    <referenceTo>DD_Product__c</referenceTo><relationshipLabel>Bundles as Low</relationshipLabel><relationshipName>Bundles_Low</relationshipName><required>false</required>
+    <description>The leaner plan in the bundle</description>
+</CustomField>

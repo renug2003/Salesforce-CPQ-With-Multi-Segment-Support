@@ -1,0 +1,24 @@
+/* Force SLDS modal to render above Salesforce navigation */
+:host {
+    display: block;
+}
+
+.slds-modal_full .slds-modal__container {
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Override modal header to use Delta Dental navy */
+.aqo-modal-header {
+    background: #003B71;
+}
+.aqo-modal-header .slds-modal__title {
+    color: #ffffff;
+}
+
+/* Modal body scrollable, no extra padding */
+.aqo-modal-body {
+    padding: 0;
+    overflow-y: auto;
+    height: calc(100vh - 4rem);
+}

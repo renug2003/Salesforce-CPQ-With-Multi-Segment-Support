@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <defaultLandingTab>DD_Product__c</defaultLandingTab>
+    <description>Delta Dental Digital Insurance Platform — catalog-driven CPQ for dental plan quoting, enrollment, claims, and billing.</description>
+    <formFactors>Large</formFactors>
+    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
+    <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
+    <label>DD Digital Insurance</label>
+    <navType>Standard</navType>
+    <tabs>standard-home</tabs>
+    <tabs>standard-Account</tabs>
+    <tabs>standard-Opportunity</tabs>
+    <tabs>DD_Quote_Builder</tabs>
+    <tabs>standard-Quote</tabs>
+    <tabs>DD_Product_Catalog__c</tabs>
+    <tabs>DD_Product__c</tabs>
+    <tabs>DD_Selling_Model__c</tabs>
+    <tabs>DD_Coverage_Spec__c</tabs>
+    <tabs>DD_Benefit_Spec__c</tabs>
+    <tabs>DD_Quote_Plan_Config__c</tabs>
+    <tabs>DD_Census__c</tabs>
+    <tabs>DD_Policy__c</tabs>
+    <tabs>DD_Enrollment__c</tabs>
+    <tabs>DD_Claim__c</tabs>
+    <tabs>DD_Billing__c</tabs>
+    <tabs>DD_Product_Rule__c</tabs>
+    <tabs>DD_SIC_Mapping__c</tabs>
+    <tabs>DD_Rate_Table__c</tabs>
+    <tabs>DD_Product_Bundle__c</tabs>
+    <tabs>DD_Commission__c</tabs>
+    <uiType>Lightning</uiType>
+</CustomApplication>

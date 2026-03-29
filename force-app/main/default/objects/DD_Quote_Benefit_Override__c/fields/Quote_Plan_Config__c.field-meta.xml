@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Quote_Plan_Config__c</fullName>
+    <label>Quote Plan Config</label>
+    <type>Lookup</type>
+    <referenceTo>DD_Quote_Plan_Config__c</referenceTo><relationshipLabel>Benefit Overrides</relationshipLabel><relationshipName>Benefit_Overrides</relationshipName><required>true</required>
+    <description>Parent quote plan config</description>
+    <deleteConstraint>Restrict</deleteConstraint>
+</CustomField>
