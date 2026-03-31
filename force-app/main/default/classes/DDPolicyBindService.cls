@@ -301,9 +301,11 @@ public with sharing class DDPolicyBindService {
             ? config.Custom_Deductible_Family__c
             : config.Product__r.Deductible_Family__c;
 
+        // Product is intentionally NOT set here — access it via
+        // Quote_Plan_Config__r.Product__r to preserve the frozen config snapshot
+        // and prevent any direct coupling to the master product catalog.
         return new DD_Policy__c(
             Account__c            = accountId,
-            Product__c            = config.Product__c,
             Quote__c              = config.Quote__c,
             Quote_Plan_Config__c  = config.Id,
             Status__c             = DDConstants.STATUS_ACTIVE,

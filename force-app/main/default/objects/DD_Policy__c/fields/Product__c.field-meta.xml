@@ -3,7 +3,7 @@
     <fullName>Product__c</fullName>
     <label>Product</label>
     <type>Lookup</type>
-    <referenceTo>DD_Product__c</referenceTo><relationshipLabel>Policies</relationshipLabel><relationshipName>Policies_Prod</relationshipName><required>true</required>
-    <description>Master product reference</description>
-    <deleteConstraint>Restrict</deleteConstraint>
+    <referenceTo>DD_Product__c</referenceTo><relationshipLabel>Policies</relationshipLabel><relationshipName>Policies_Prod</relationshipName><required>false</required>
+    <description>DEPRECATED — do not populate. Product is now accessed via Quote_Plan_Config__r.Product__r to preserve the frozen configuration snapshot.</description>
+    <deleteConstraint>SetNull</deleteConstraint>
 </CustomField>

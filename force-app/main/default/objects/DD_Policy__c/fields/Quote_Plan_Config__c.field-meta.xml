@@ -3,6 +3,7 @@
     <fullName>Quote_Plan_Config__c</fullName>
     <label>Quote Plan Config</label>
     <type>Lookup</type>
-    <referenceTo>DD_Quote_Plan_Config__c</referenceTo><relationshipLabel>Policies</relationshipLabel><relationshipName>Policies_QPC</relationshipName><required>false</required>
-    <description>Source config (for traceability)</description>
+    <referenceTo>DD_Quote_Plan_Config__c</referenceTo><relationshipLabel>Policies</relationshipLabel><relationshipName>Policies_QPC</relationshipName><required>true</required>
+    <deleteConstraint>Restrict</deleteConstraint>
+    <description>The plan purchased — frozen agent configuration snapshot. Product is accessed via Quote_Plan_Config__r.Product__r; never link DD_Policy__c directly to DD_Product__c.</description>
 </CustomField>

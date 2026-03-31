@@ -155,18 +155,21 @@ private class DDPolicyBindServiceTest {
         Id policyId = DDPolicyBindService.bindQuote(q.Id);
         Test.stopTest();
 
+        // Product is accessed via the plan purchased (Quote_Plan_Config__r), not directly
         DD_Policy__c policy = [
-            SELECT Deductible_Individual__c, Deductible_Family__c, Product__c
+            SELECT Deductible_Individual__c, Deductible_Family__c,
+                   Quote_Plan_Config__r.Product__r.Deductible_Individual__c,
+                   Quote_Plan_Config__r.Product__r.Deductible_Family__c
             FROM DD_Policy__c WHERE Id = :policyId
         ];
-        DD_Product__c product = [
-            SELECT Deductible_Individual__c, Deductible_Family__c
-            FROM DD_Product__c WHERE Id = :policy.Product__c
-        ];
 
-        System.assertEquals(product.Deductible_Individual__c, policy.Deductible_Individual__c,
+        System.assertEquals(
+            policy.Quote_Plan_Config__r.Product__r.Deductible_Individual__c,
+            policy.Deductible_Individual__c,
             'Deductible_Individual should be copied from master product when no override set');
-        System.assertEquals(product.Deductible_Family__c, policy.Deductible_Family__c,
+        System.assertEquals(
+            policy.Quote_Plan_Config__r.Product__r.Deductible_Family__c,
+            policy.Deductible_Family__c,
             'Deductible_Family should be copied from master product when no override set');
     }
 
