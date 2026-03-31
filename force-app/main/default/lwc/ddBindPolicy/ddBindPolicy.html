@@ -1,22 +1,18 @@
 <template>
     <lightning-card>
         <div slot="title">
-            <span class="slds-icon_container slds-icon-action-approval" style="margin-right:0.5rem;">
-                <lightning-icon icon-name="action:approval" size="small"></lightning-icon>
-            </span>
+            <lightning-icon icon-name="action:approval" size="small" style="margin-right:0.5rem;"></lightning-icon>
             Bind Policy &amp; Issue Group
         </div>
 
         <div class="slds-p-around_medium">
 
-            <!-- Loading -->
             <template lwc:if={isLoading}>
                 <div class="slds-align_absolute-center slds-p-around_large">
                     <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
                 </div>
             </template>
 
-            <!-- Error -->
             <template lwc:if={errorMessage}>
                 <div class="bind-error">
                     <lightning-icon icon-name="utility:error" size="x-small"></lightning-icon>
@@ -24,12 +20,12 @@
                 </div>
             </template>
 
-            <!-- SUCCESS screen -->
+            <!-- SUCCESS -->
             <template lwc:if={bound}>
                 <div class="bind-success">
                     <lightning-icon icon-name="action:approval" size="large" class="success-icon"></lightning-icon>
                     <h2>Policy Bound Successfully!</h2>
-                    <p>The group and policy records have been created.</p>
+                    <p>Group and policy records have been created.</p>
                     <div class="bind-links">
                         <a href={groupUrl} target="_blank" class="bind-link">
                             <lightning-icon icon-name="standard:account" size="x-small"></lightning-icon>
@@ -46,10 +42,9 @@
                 </div>
             </template>
 
-            <!-- CONFIRMATION screen -->
+            <!-- CONFIRMATION -->
             <template lwc:if={showConfirm}>
                 <div class="bind-summary">
-                    <div class="bind-summary-header">Binding will create the following records</div>
 
                     <div class="bind-section-label">ACCOUNT</div>
                     <div class="bind-row">
@@ -69,30 +64,47 @@
                         <span class="bind-val bind-premium">{formattedTotalPremium}</span>
                     </div>
 
-                    <div class="bind-section-label">PLANS</div>
-                    <template for:each={summary.plans} for:item="plan">
-                        <div key={plan.configId} class="bind-plan-row">
-                            <span class="bind-plan-name">{plan.planName}</span>
-                            <span class="bind-plan-detail">Eff: {plan.effectiveDate} &nbsp;|&nbsp; Annual Max: ${plan.annualMax}</span>
+                    <div class="bind-section-label">
+                        PROPOSALS — Accept or Reject each before binding
+                    </div>
+                    <p class="bind-hint">
+                        One group will be created for this quote.
+                        Only accepted proposals generate a policy.
+                    </p>
+
+                    <template for:each={proposalRows} for:item="row">
+                        <div key={row.id} class={row.rowClass}>
+                            <div class="prop-info">
+                                <span class="prop-name">{row.name}</span>
+                                <span class="prop-plan">{row.plan}</span>
+                                <span class="prop-premium">{row.formattedPremium}/mo</span>
+                            </div>
+                            <div class="prop-actions">
+                                <template lwc:if={row.isPending}>
+                                    <button class="btn-accept" data-id={row.id} onclick={handleAccept}>✓ Accept</button>
+                                    <button class="btn-reject" data-id={row.id} onclick={handleReject}>✗ Reject</button>
+                                </template>
+                                <template lwc:if={row.isAccepted}>
+                                    <span class="status-accepted">✓ Accepted</span>
+                                    <button class="btn-undo" data-id={row.id} onclick={handleUndo}>Undo</button>
+                                </template>
+                                <template lwc:if={row.isRejected}>
+                                    <span class="status-rejected">✗ Rejected</span>
+                                    <button class="btn-undo" data-id={row.id} onclick={handleUndo}>Undo</button>
+                                </template>
+                            </div>
                         </div>
                     </template>
 
-                    <div class="bind-section-label">PROPOSALS TO ACCEPT</div>
-                    <template for:each={summary.proposals} for:item="prop">
-                        <div key={prop.id} class="bind-prop-row">
-                            <lightning-input type="checkbox" label={prop.name}
-                                data-id={prop.id}
-                                checked
-                                onchange={handleProposalToggle}>
-                            </lightning-input>
-                        </div>
+                    <template lwc:if={hasPendingProposals}>
+                        <p class="bind-warning">⚠ All proposals must be accepted or rejected before binding.</p>
                     </template>
                 </div>
 
                 <div class="bind-actions">
                     <lightning-button label="Cancel" variant="neutral" onclick={handleCancel}></lightning-button>
                     <lightning-button label="Bind &amp; Issue Policy" variant="brand"
-                        disabled={isLoading} onclick={handleBind}></lightning-button>
+                        disabled={isBindDisabled} onclick={handleBind}></lightning-button>
                 </div>
             </template>
 

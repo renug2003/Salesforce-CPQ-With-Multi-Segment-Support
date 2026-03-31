@@ -55,22 +55,21 @@ public with sharing class DDPolicyBindService {
      * @throws DDRatingException     if rate results are missing
      */
     public static List<Id> bindQuoteAll(Id quoteId) {
+        return bindQuoteAll(quoteId, null);
+    }
+
+    /** Overload — only binds configs in the provided set (null = all configs) */
+    public static List<Id> bindQuoteAll(Id quoteId, Set<Id> configIdFilter) {
         if (quoteId == null) {
             throw new DDValidationException('quoteId is required for bindQuote');
         }
 
-        // Savepoint — any failure rolls back the entire bind
         Savepoint sp = Database.setSavepoint();
-
         try {
-            return executeBindTransaction(quoteId);
+            return executeBindTransaction(quoteId, configIdFilter);
         } catch (Exception e) {
             Database.rollback(sp);
-            // Re-throw as a typed exception so callers can distinguish bind failures
-            // from unrelated system errors
-            if (e instanceof DDValidationException || e instanceof DDRatingException) {
-                throw e;
-            }
+            if (e instanceof DDValidationException || e instanceof DDRatingException) throw e;
             throw new DDRatingException(
                 'Policy bind failed and was rolled back. Cause: ' + e.getMessage()
             );
@@ -81,9 +80,10 @@ public with sharing class DDPolicyBindService {
     // PRIVATE — TRANSACTION BODY
     // ─────────────────────────────────────────────────────────────────────────
 
-    private static List<Id> executeBindTransaction(Id quoteId) {
+    private static List<Id> executeBindTransaction(Id quoteId, Set<Id> configIdFilter) {
 
-        // ── STEP 1: Load all DD_Quote_Plan_Config__c records for this quote ──
+        // ── STEP 1: Load DD_Quote_Plan_Config__c records for this quote ───────
+        // If configIdFilter is provided, only bind those configs (accepted proposals)
         //    Include subqueries for:
         //      • Coverage_Configs__r — agent overrides to coinsurance values
         //      • Rate_Results__r     — calculated monthly premium per tier
@@ -125,6 +125,15 @@ public with sharing class DDPolicyBindService {
             WHERE Quote__c = :quoteId
             ORDER BY CreatedDate ASC
         ];
+
+        // Filter to accepted configs only when a filter set is provided
+        if (configIdFilter != null && !configIdFilter.isEmpty()) {
+            List<DD_Quote_Plan_Config__c> filtered = new List<DD_Quote_Plan_Config__c>();
+            for (DD_Quote_Plan_Config__c c : configs) {
+                if (configIdFilter.contains(c.Id)) filtered.add(c);
+            }
+            configs = filtered;
+        }
 
         if (configs.isEmpty()) {
             throw new DDValidationException(
